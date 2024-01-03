@@ -11,7 +11,7 @@ import { Accordion } from '@/components/ui/accordion';
 import { Organization, NavItem } from './nav-item';
 
 interface SideBarProps {
-  storageKey?: string;
+  storageKey: string;
 }
 const Sidebar = ({ storageKey = 't-sidebar-state' }: SideBarProps) => {
   const [expanded, setExpanded] = useLocalStorage<Record<string, any>>(
