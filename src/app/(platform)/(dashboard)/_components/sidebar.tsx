@@ -8,9 +8,10 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import { Accordion } from '@/components/ui/accordion';
+import { Organization, NavItem } from './nav-item';
 
 interface SideBarProps {
-  storageKey: string;
+  storageKey?: string;
 }
 const Sidebar = ({ storageKey = 't-sidebar-state' }: SideBarProps) => {
   const [expanded, setExpanded] = useLocalStorage<Record<string, any>>(
@@ -47,7 +48,15 @@ const Sidebar = ({ storageKey = 't-sidebar-state' }: SideBarProps) => {
   if (!isLoadedOrg || !isLoadedOrgList || userMemberships.isLoading) {
     return (
       <>
-        <Skeleton />
+        <div className="flex items-center justify-between mb-2">
+          <Skeleton className="h-10 w-[50%]" />
+          <Skeleton className="h-10 w-10" />
+        </div>
+        <div className="space-y-2">
+          <NavItem.Skeleton />
+          <NavItem.Skeleton />
+          <NavItem.Skeleton />
+        </div>
       </>
     );
   }
@@ -74,7 +83,15 @@ const Sidebar = ({ storageKey = 't-sidebar-state' }: SideBarProps) => {
         className="space-y-2"
       >
         {userMemberships.data.map(({ organization }) => {
-          return <p key={organization.id}>{organization.id}</p>;
+          return (
+            <NavItem
+              key={organization.id}
+              isActive={activeOrganization?.id === organization.id}
+              isExpanded={expanded[organization.id]}
+              organization={organization as Organization}
+              onExpand={onExpand}
+            />
+          );
         })}
       </Accordion>
     </>
