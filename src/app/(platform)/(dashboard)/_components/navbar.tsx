@@ -22,7 +22,7 @@ const Navbar = () => {
           Create
         </Button>
         <Button size="sm" className="md:hidden">
-          <Plus className="h-4 w-4" />
+          <Plus className="h-4 w-4"/>
         </Button>
       </div>
       <div className="ml-auto flex items-center gap-x-2">
