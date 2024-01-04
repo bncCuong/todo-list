@@ -21,11 +21,9 @@ export const useAction = <TInput, TOutput>(
 
   const execute = useCallback(
     async (input: TInput) => {
-      setIsLoading(true);
-
       try {
-        // throw new Error('123');
         const result = await action(input);
+        setIsLoading(true);
 
         if (!result) {
           return;

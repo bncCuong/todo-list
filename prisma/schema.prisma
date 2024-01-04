@@ -11,6 +11,23 @@ generator client {
 
 model Board { 
   id String @id @default(uuid())
-
+  orgId String
   title String
+  imageId String
+  imageThumbUrl String @db.Text
+  imageFullUrl String @db.Text
+  imageUserName String @db.Text
+  imageLinkHTML String @db.Text
+  
+  createAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
+
+
+// run prisma
+// npx prisma studio
+
+// khi them 1 model can rs lai prisma
+// npx prisma migrate reset
+// npx prisma db push
+

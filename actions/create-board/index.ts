@@ -6,22 +6,30 @@ import { db } from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 import { createSafeAction } from '@/lib/create-safe-action';
 import { CreateBoard } from './schema';
-import { error } from 'console';
 
 const handler = async (data: InputType): Promise<ReturnType> => {
-  const { userId } = auth();
-  if (!userId) {
+  const { userId, orgId } = auth();
+  if (!userId || !orgId) {
     return {
       error: 'Unauthornized',
     };
   }
-  const { title } = data;
-  if (title === '') return { error: 'Title cant be empty' };
+  const { title, image } = data;
+  const [imageId, imageUrlThumb, imageUrlFull, imageLinkHTML, imageUserName] = image.split('|');
+  if (!imageId || !imageUrlThumb || !imageUrlFull || !imageLinkHTML || !imageUserName) {
+    return { error: 'Missing fields. Failed to create board' };
+  }
   let board;
   try {
     board = await db.board.create({
       data: {
         title,
+        orgId,
+        imageId,
+        imageUrlThumb,
+        imageUrlFull,
+        imageLinkHTML,
+        imageUserName,
       },
     });
   } catch (error) {
