@@ -20,6 +20,30 @@ export const FormPicker = ({ id, errors }: FormPickerProps) => {
   const [selectedId, setSelectedId] = useState(null);
 
   const { pending } = useFormStatus();
+
+  //lấy random ảnh từ constant
+  useEffect(() => {
+    function getRandomSubarray(arr: [], count: number) {
+      // Tạo mảng mới để chứa các phần tử ngẫu nhiên
+      const result = []!;
+
+      // Mảng vị trí ban đầu từ 0 đến chiều dài của mảng arr
+      const indices = Array.from({ length: arr.length }, (_, index) => index);
+
+      // Lấy ngẫu nhiên 'count' vị trí từ mảng indices
+      for (let i = 0; i < count; i++) {
+        const randomIndex = Math.floor(Math.random() * indices.length);
+        const index = indices.splice(randomIndex, 1)[0];
+        result.push(arr[index]);
+      }
+
+      return result;
+    }
+
+    setImages(getRandomSubarray(images as [], 9));
+  }, []);
+
+  //get images từ api unsplash
   useEffect(() => {
     const fetchImages = async () => {
       try {
@@ -42,6 +66,7 @@ export const FormPicker = ({ id, errors }: FormPickerProps) => {
     };
     fetchImages();
   }, []);
+
   if (isLoading) {
     return (
       <div className="p-6 flex items-center justify-center ">
@@ -96,6 +121,3 @@ export const FormPicker = ({ id, errors }: FormPickerProps) => {
     </div>
   );
 };
-
-// NEXT_PUBLIC_UNSPLASH_ACCESS_KEY = LaAvrZamY2_5RWPTUMd - wocCR1z3nQaP_0V455iPJdw;
-// NEXT_PUBLIC_UNSPLASH_SECRET_KEY = Oh - JdFbTMISs - WDQaxtEYULk6NulD2jd9MVchk4Fr - M;
