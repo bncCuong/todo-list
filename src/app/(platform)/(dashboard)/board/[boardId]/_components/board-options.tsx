@@ -11,7 +11,6 @@ import { toast } from 'sonner';
 import { useFormStatus } from 'react-dom';
 
 const BoardOption = ({ id }: { id: string }) => {
-  const { pending } = useFormStatus();
   const { execute, isLoading } = useAction(deleteBoard, {
     onSuccess: (data) => {
       toast.success('Delete board successfuly');
