@@ -1,6 +1,7 @@
 import { db } from '@/lib/db';
 import { auth } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
+import { ListContainer } from './_components/list-container';
 
 const BoardPage = async ({ params }: { params: { boardId: string } }) => {
   const { orgId } = auth();
@@ -24,7 +25,11 @@ const BoardPage = async ({ params }: { params: { boardId: string } }) => {
       order: 'asc',
     },
   });
-  return <div className="">Borad page</div>;
+  return (
+    <div className="p-4 overflow-x-auto h-full ">
+      <ListContainer boardId={params.boardId} data={lists} />
+    </div>
+  );
 };
 
 export default BoardPage;

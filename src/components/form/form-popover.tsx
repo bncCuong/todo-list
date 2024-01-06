@@ -24,7 +24,6 @@ export const FormPopover = ({ children, align, side = 'bottom', sideOffset = 1 }
   const closeRef = useRef<ElementRef<'button'>>(null);
   const { execute, fieldErrors, isLoading } = useAction(createBoard, {
     onSuccess: (data) => {
-      console.log({ data });
       toast.success('Create Successfuly');
       closeRef.current?.click();
       router.push(`/board/${data.id}`);
@@ -41,8 +40,13 @@ export const FormPopover = ({ children, align, side = 'bottom', sideOffset = 1 }
       toast.warning('Title could not be empty');
       return;
     }
+    if (!image) {
+      toast.warning('Pick someone image first!');
+      return;
+    }
     execute({ title, image });
   };
+
   return (
     <Popover>
       <PopoverTrigger asChild>{children}</PopoverTrigger>

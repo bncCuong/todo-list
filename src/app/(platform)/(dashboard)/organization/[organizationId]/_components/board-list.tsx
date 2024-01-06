@@ -18,7 +18,7 @@ export const BoardList = async () => {
       orgId,
     },
     orderBy: {
-      createdAt: 'desc',
+      createdAt: 'asc',
     },
   });
 
