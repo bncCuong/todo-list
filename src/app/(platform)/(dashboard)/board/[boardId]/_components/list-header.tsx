@@ -6,15 +6,16 @@ import { ElementRef, useRef, useState } from 'react';
 import { useEventListener } from 'usehooks-ts';
 import { updateList } from '../../../../../../../actions/update-list';
 import { toast } from 'sonner';
+import ListOption from './list-option';
 
 export const ListHeader = ({ data }: { data: List }) => {
   const [title, setTitle] = useState(data.title);
   const inputRef = useRef<ElementRef<'input'>>(null);
   const formRef = useRef<ElementRef<'form'>>(null);
-  const { isEditing, disableEditing, enableEditting, onKeyDown } = useEditTitle(formRef, inputRef);
+  const { isEditing, disableEditing, enableEditting, onKeyDown } = useEditTitle(inputRef);
   const { execute } = useAction(updateList, {
     onSuccess: (data) => {
-      toast.success(`Title list ${data.title} updated`);
+      toast.success(`Rename to "${data.title}" `);
       setTitle(data.title);
       disableEditing();
     },
@@ -36,6 +37,11 @@ export const ListHeader = ({ data }: { data: List }) => {
     execute({ title, boardId, id });
   };
 
+  // click outside chay func onsubmit
+  const onBlur = () => {
+    formRef.current?.requestSubmit();
+  };
+
   return (
     <div className="pt-2 px-2 flex justify-between items-start text-sm font-semibold gap-x-2">
       {isEditing ? (
@@ -44,17 +50,20 @@ export const ListHeader = ({ data }: { data: List }) => {
           <input hidden id="boardId" name="boardId" value={data.boardId} onChange={() => {}} />
           <FormInput
             ref={inputRef}
-            onBlur={disableEditing}
+            onBlur={onBlur}
             placeholder="Enter list title..."
             id="title"
             defaultValue={data.title}
           />
+
+          <button hidden type="submit" />
         </form>
       ) : (
         <div onClick={enableEditting} className="w-full text-sm px-2.5 py-1 h-7 font-medium border-transparent">
           {title}
         </div>
       )}
+      <ListOption data={data} onAddCard={() => {}} />
     </div>
   );
 };

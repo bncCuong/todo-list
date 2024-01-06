@@ -13,7 +13,7 @@ export const BoardTitleFrom = ({ data }: { data: Board }) => {
   const formRef = useRef<ElementRef<'form'>>(null);
   const inputRef = useRef<ElementRef<'input'>>(null);
   const [title, setTitle] = useState<string>(data.title);
-  const { isEditing, disableEditing, onBlur, enableEditting } = useEditTitle(formRef, inputRef);
+  const { isEditing, disableEditing, enableEditting } = useEditTitle(inputRef);
   const { execute, fieldErrors } = useAction(updateBoard, {
     onSuccess: (data) => {
       toast.success(`Board "${data.title}" is updated`);
@@ -29,6 +29,11 @@ export const BoardTitleFrom = ({ data }: { data: Board }) => {
   const onSubmit = (formData: FormData) => {
     const title = formData.get('title') as string;
     execute({ title, id: data.id });
+  };
+
+  // click outside chay func onsubmit
+  const onBlur = () => {
+    formRef.current?.requestSubmit();
   };
 
   if (isEditing) {

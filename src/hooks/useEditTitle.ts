@@ -1,11 +1,6 @@
 import { RefObject, useState } from 'react';
 
-interface useEditProps {
-  formRef: RefObject<HTMLFormElement>;
-  inputRef: RefObject<HTMLInputElement>;
-}
-
-export const useEditTitle = ({ formRef, inputRef }: useEditProps) => {
+export const useEditTitle = (inputRef: RefObject<HTMLInputElement>) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const disableEditing = () => {
     setIsEditing(false);
@@ -14,8 +9,10 @@ export const useEditTitle = ({ formRef, inputRef }: useEditProps) => {
   const enableEditting = () => {
     setIsEditing(true);
     setTimeout(() => {
-      inputRef.current?.focus();
-      inputRef.current?.select();
+      if (inputRef) {
+        inputRef.current?.focus();
+        inputRef.current?.select();
+      }
     });
   };
 
@@ -28,9 +25,5 @@ export const useEditTitle = ({ formRef, inputRef }: useEditProps) => {
     }
   };
 
-  // click outside chay func onsubmit
-  const onBlur = () => {
-    formRef.current?.requestSubmit();
-  };
-  return { isEditing, disableEditing, enableEditting, onKeyDown, onBlur };
+  return { isEditing, disableEditing, enableEditting, onKeyDown };
 };

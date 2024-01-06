@@ -19,7 +19,7 @@ export const ListForm = () => {
   const formRef = useRef<ElementRef<'form'>>(null);
   const inputRef = useRef<ElementRef<'input'>>(null);
 
-  const { isEditing, disableEditing, enableEditting, onKeyDown } = useEditTitle(formRef, inputRef);
+  const { isEditing, disableEditing, enableEditting, onKeyDown } = useEditTitle( inputRef);
 
   useEventListener('keydown', onKeyDown);
   useOnClickOutside(formRef, disableEditing);
