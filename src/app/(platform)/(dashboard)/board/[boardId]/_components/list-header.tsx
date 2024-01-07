@@ -8,7 +8,7 @@ import { updateList } from '../../../../../../../actions/update-list';
 import { toast } from 'sonner';
 import ListOption from './list-option';
 
-export const ListHeader = ({ data }: { data: List }) => {
+export const ListHeader = ({ data, onAddCard }: { data: List; onAddCard: () => void }) => {
   const [title, setTitle] = useState(data.title);
   const inputRef = useRef<ElementRef<'input'>>(null);
   const formRef = useRef<ElementRef<'form'>>(null);
@@ -63,7 +63,7 @@ export const ListHeader = ({ data }: { data: List }) => {
           {title}
         </div>
       )}
-      <ListOption data={data} onAddCard={() => {}} />
+      <ListOption data={data} onAddCard={onAddCard} />
     </div>
   );
 };

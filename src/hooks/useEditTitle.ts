@@ -1,6 +1,6 @@
 import { RefObject, useState } from 'react';
 
-export const useEditTitle = (inputRef: RefObject<HTMLInputElement>) => {
+export const useEditTitle = (inputRef?: RefObject<HTMLInputElement>) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const disableEditing = () => {
     setIsEditing(false);
@@ -15,9 +15,6 @@ export const useEditTitle = (inputRef: RefObject<HTMLInputElement>) => {
       }
     });
   };
-
-  if (isEditing) {
-  }
 
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'escape') {
