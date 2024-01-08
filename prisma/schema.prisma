@@ -68,7 +68,7 @@ enum ENTITY_TYPE {
   CARD 
 }
 
-model auditLog {
+model AuditLog {
   id            String @id @default(uuid())
   orgId         String
   userId        String
@@ -76,7 +76,7 @@ model auditLog {
   entityTitle   String
   action        ACTION
   entityType    ENTITY_TYPE
-  useImage      String @db.Text
+  userImage      String @db.Text
   userName      String @db.Text
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
