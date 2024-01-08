@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { useAction } from '@/hooks/useActions';
 import { createList } from '../../../../../../../actions/create-list';
 import { toast } from 'sonner';
-import { useEditTitle } from '@/hooks/useEditTitle';
+import { useEditTitleInput } from '@/hooks/useEditTitle-input';
 
 export const ListForm = () => {
   const params = useParams();
@@ -19,7 +19,7 @@ export const ListForm = () => {
   const formRef = useRef<ElementRef<'form'>>(null);
   const inputRef = useRef<ElementRef<'input'>>(null);
 
-  const { isEditing, disableEditing, enableEditting, onKeyDown } = useEditTitle( inputRef);
+  const { isEditing, disableEditing, enableEditting, onKeyDown } = useEditTitleInput(inputRef);
 
   useEventListener('keydown', onKeyDown);
   useOnClickOutside(formRef, disableEditing);

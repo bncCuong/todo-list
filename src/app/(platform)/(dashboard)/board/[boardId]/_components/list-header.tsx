@@ -1,18 +1,18 @@
 import { FormInput } from '@/components/form/form-input';
 import { useAction } from '@/hooks/useActions';
-import { useEditTitle } from '@/hooks/useEditTitle';
 import { List } from '@prisma/client';
 import { ElementRef, useRef, useState } from 'react';
 import { useEventListener } from 'usehooks-ts';
 import { updateList } from '../../../../../../../actions/update-list';
 import { toast } from 'sonner';
 import ListOption from './list-option';
+import { useEditTitleInput } from '@/hooks/useEditTitle-input';
 
 export const ListHeader = ({ data, onAddCard }: { data: List; onAddCard: () => void }) => {
   const [title, setTitle] = useState(data.title);
   const inputRef = useRef<ElementRef<'input'>>(null);
   const formRef = useRef<ElementRef<'form'>>(null);
-  const { isEditing, disableEditing, enableEditting, onKeyDown } = useEditTitle(inputRef);
+  const { isEditing, disableEditing, enableEditting, onKeyDown } = useEditTitleInput(inputRef);
   const { execute } = useAction(updateList, {
     onSuccess: (data) => {
       toast.success(`Rename to "${data.title}" `);

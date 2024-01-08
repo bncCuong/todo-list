@@ -1,6 +1,6 @@
 import { RefObject, useState } from 'react';
 
-export const useEditTitle = (inputRef?: RefObject<HTMLInputElement>) => {
+export const useEditTitleInput = (inputRef: RefObject<HTMLInputElement>) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const disableEditing = () => {
     setIsEditing(false);
@@ -9,10 +9,8 @@ export const useEditTitle = (inputRef?: RefObject<HTMLInputElement>) => {
   const enableEditting = () => {
     setIsEditing(true);
     setTimeout(() => {
-      if (inputRef) {
-        inputRef.current?.focus();
-        inputRef.current?.select();
-      }
+      inputRef.current?.focus();
+      inputRef.current?.select();
     });
   };
 

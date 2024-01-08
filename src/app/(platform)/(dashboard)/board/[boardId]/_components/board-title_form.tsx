@@ -7,13 +7,13 @@ import { ElementRef, useRef, useState } from 'react';
 import { updateBoard } from '../../../../../../../actions/update-board';
 import { useAction } from '@/hooks/useActions';
 import { toast } from 'sonner';
-import { useEditTitle } from '@/hooks/useEditTitle';
+import { useEditTitleInput } from '@/hooks/useEditTitle-input';
 
 export const BoardTitleFrom = ({ data }: { data: Board }) => {
   const formRef = useRef<ElementRef<'form'>>(null);
   const inputRef = useRef<ElementRef<'input'>>(null);
   const [title, setTitle] = useState<string>(data.title);
-  const { isEditing, disableEditing, enableEditting } = useEditTitle(inputRef);
+  const { isEditing, disableEditing, enableEditting } = useEditTitleInput(inputRef);
   const { execute, fieldErrors } = useAction(updateBoard, {
     onSuccess: (data) => {
       toast.success(`Board "${data.title}" is updated`);

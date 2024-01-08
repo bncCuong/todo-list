@@ -55,6 +55,32 @@ model Card {
   @@index([listId])
 }
 
+
+enum ACTION {
+  CREATE
+  UPDATE
+  DELETE
+}
+
+enum ENTITY_TYPE {
+  BOARD 
+  LIST 
+  CARD 
+}
+
+model auditLog {
+  id            String @id @default(uuid())
+  orgId         String
+  userId        String
+  entityId      String
+  entityTitle   String
+  action        ACTION
+  entityType    ENTITY_TYPE
+  useImage      String @db.Text
+  userName      String @db.Text
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
 // run prisma
 // npx prisma studio
 
