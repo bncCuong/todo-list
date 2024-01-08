@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 'use client';
 import { ElementRef, useRef, useState } from 'react';
 import { Layout } from 'lucide-react';
@@ -23,9 +24,9 @@ const HeaderModal = ({ data, onClose }: { data: CardWithList; onClose: () => voi
   const { execute, fieldErrors } = useAction(updateCard, {
     onSuccess: (_data) => {
       queryClient.invalidateQueries({ queryKey: ['card', _data.id] });
+      queryClient.invalidateQueries({ queryKey: ['card-logs', _data.id] });
       toast.success(`Updated name to "${_data.title}" `);
       setTitle(_data.title);
-      onClose();
     },
     onError: (error) => {
       toast.error(error);

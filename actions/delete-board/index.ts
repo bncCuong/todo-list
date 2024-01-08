@@ -7,6 +7,9 @@ import { revalidatePath } from 'next/cache';
 import { createSafeAction } from '@/lib/create-safe-action';
 import { DeleteBoard } from './schema';
 import { redirect } from 'next/navigation';
+import { createAuditLog } from '@/lib/create-auditLog';
+import { ACTION, ENTITY_TYPE } from '@prisma/client';
+import { decreaseAvailabelCount } from '@/lib/org-limit';
 
 const hanler = async (data: InputType): Promise<ReturnType> => {
   const { orgId, userId } = auth();
@@ -24,6 +27,14 @@ const hanler = async (data: InputType): Promise<ReturnType> => {
         orgId,
         id,
       },
+    });
+    await decreaseAvailabelCount();
+
+    await createAuditLog({
+      entityTitle: board.title,
+      entityId: board.id,
+      action: ACTION.DELETE,
+      entityType: ENTITY_TYPE.BOARD,
     });
   } catch (error) {
     return { error: 'Error to delete!' };

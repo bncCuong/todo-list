@@ -1,6 +1,6 @@
 'use client';
 
-import { Copy, Trash } from 'lucide-react';
+import { Copy, Hand, Trash } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
 import { useAction } from '@/hooks/useActions';
@@ -44,8 +44,11 @@ const ActionsModal = ({ data, onClose }: { data: CardWithList; onClose: () => vo
     executeDeleteCard({ boardId, id });
   };
   return (
-    <div className="flex flex-col">
-      <p className="font-semibold mb-1">Action:</p>
+    <div className="flex flex-col ml-10 md:ml-0 min-w-[120px]">
+      <div className=" flex items-center gap-2">
+        <Hand className="w-4 h-4 mb-1" />
+        <p className="font-semibold mb-1">Action:</p>
+      </div>
       <Button disabled={loading} className="my-1" onClick={onCopyCardHanler}>
         <Copy className="w-4 h-4 mr-2" /> Copy
       </Button>
@@ -58,6 +61,7 @@ const ActionsModal = ({ data, onClose }: { data: CardWithList; onClose: () => vo
 
 export default ActionsModal;
 
+// eslint-disable-next-line react/display-name
 ActionsModal.Skeleton = () => {
   return (
     <div className="flex flex-col ">

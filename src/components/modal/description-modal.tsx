@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 'use client';
 
 import { AlignLeft } from 'lucide-react';
@@ -32,6 +33,7 @@ export const DescriptionModal = ({ data }: { data: CardWithList }) => {
       queryClient.invalidateQueries({
         queryKey: ['card', _data.id],
       });
+      queryClient.invalidateQueries({ queryKey: ['card-logs', _data.id] });
       disableEditing();
     },
     onError: (error) => {

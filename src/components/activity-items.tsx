@@ -10,11 +10,11 @@ interface ActivityItemProps {
 
 export const ActivityItem = ({ data }: ActivityItemProps) => {
   return (
-    <li className="flex items-center gap-x-2">
+    <li className="flex items-center gap-x-2 ">
       <Avatar className="h-8 w-8">
         <AvatarImage src={data.userImage} />
       </Avatar>
-      <div className="flex flex-col space-y-0.5 w-[360px]">
+      <div className="flex flex-col space-y-0.5 w-[400px] lg:max-w-2xl">
         <p className="text-sm text-muted-foreground">
           <span className="font-semibold lowercase text-neutral-700">{data.userName}</span> {generateLogMessage(data)}
         </p>

@@ -22,14 +22,13 @@ interface PopoverProps {
 export const FormPopover = ({ children, align, side = 'bottom', sideOffset = 1 }: PopoverProps) => {
   const router = useRouter();
   const closeRef = useRef<ElementRef<'button'>>(null);
-  const { execute, fieldErrors, isLoading } = useAction(createBoard, {
+  const { execute, fieldErrors } = useAction(createBoard, {
     onSuccess: (data) => {
       toast.success('Create Successfuly');
       closeRef.current?.click();
       router.push(`/board/${data.id}`);
     },
     onError: (error) => {
-      console.log({ error });
       toast.error(error);
     },
   });

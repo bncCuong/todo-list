@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { FormPopover } from '@/components/form/form-popover';
@@ -6,6 +7,8 @@ import { db } from '@/lib/db';
 import { auth } from '@clerk/nextjs';
 import { HelpCircle, User2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { BOARD_FREE } from '@/constant/board-count';
+import { getAvailabelCount } from '@/lib/org-limit';
 
 export const BoardList = async () => {
   const { orgId } = auth();
@@ -22,6 +25,7 @@ export const BoardList = async () => {
     },
   });
 
+  const availabelCount = await getAvailabelCount();
   return (
     <div className="space-y-4">
       <div className="flex items-center font-semibold text-lg text-neutral-700">
@@ -47,7 +51,7 @@ export const BoardList = async () => {
             role="button"
           >
             <p className="text-sm"> Create new Board</p>
-            <span className="text-xs">5 Remaining</span>
+            <span className="text-xs">{BOARD_FREE - availabelCount} Remaining</span>
             <Hint
               side="bottom"
               sideOffset={40}

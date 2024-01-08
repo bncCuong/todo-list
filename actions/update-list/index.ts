@@ -6,6 +6,8 @@ import { db } from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 import { createSafeAction } from '@/lib/create-safe-action';
 import { UpdateList } from './schema';
+import { createAuditLog } from '@/lib/create-auditLog';
+import { ACTION, ENTITY_TYPE } from '@prisma/client';
 
 const hanler = async (data: InputType): Promise<ReturnType> => {
   const { orgId, userId } = auth();
@@ -15,10 +17,10 @@ const hanler = async (data: InputType): Promise<ReturnType> => {
 
   const { title, id, boardId } = data;
 
-  let lists;
+  let list;
 
   try {
-    lists = await db.list.update({
+    list = await db.list.update({
       where: {
         board: {
           orgId,
@@ -30,12 +32,18 @@ const hanler = async (data: InputType): Promise<ReturnType> => {
         title,
       },
     });
+    await createAuditLog({
+      entityTitle: list.title,
+      entityId: list.id,
+      action: ACTION.UPDATE,
+      entityType: ENTITY_TYPE.LIST,
+    });
   } catch (error) {
     return { error: 'Error to update!' };
   }
 
   revalidatePath(`/board/${boardId}`);
-  return { data: lists };
+  return { data: list };
 };
 
 export const updateList = createSafeAction(UpdateList, hanler);
