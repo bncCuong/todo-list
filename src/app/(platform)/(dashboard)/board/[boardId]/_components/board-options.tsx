@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useAction } from '@/hooks/useActions';
-import { MoreHorizontal, X } from 'lucide-react';
+import { MoreHorizontal, Trash, X } from 'lucide-react';
 import { deleteBoard } from '../../../../../../../actions/delete-board';
 import { redirect } from 'next/navigation';
 import { auth } from '@clerk/nextjs';
@@ -36,11 +36,12 @@ const BoardOption = ({ id }: { id: string }) => {
         <Button
           disabled={isLoading}
           variant="ghost"
-          className="h-auto w-full p-2 px-5 justify-start font-normal text-sm"
+          className="h-auto w-full p-2 px-5 justify-start font-normal text-base"
           onClick={() => {
             execute({ id });
           }}
         >
+          <Trash className="w-4 h-4 mr-1 text-neutral-600" />
           Delete this board
         </Button>
       </PopoverContent>

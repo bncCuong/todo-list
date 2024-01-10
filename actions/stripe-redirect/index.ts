@@ -12,7 +12,6 @@ import { InputType, ReturnType } from './types';
 
 import { absoluteUrl } from '@/lib/utils';
 import { stripe } from '@/lib/stripe';
-import { error } from 'console';
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const { userId, orgId } = auth();

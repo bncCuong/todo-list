@@ -7,12 +7,13 @@ import { Plus } from 'lucide-react';
 import React from 'react';
 import MobileSidebar from './mobie-sidebar';
 import { FormPopover } from '@/components/form/form-popover';
+import ClockRealTime from '@/components/clock-realtime';
 
 const Navbar = () => {
   return (
-    <nav className="fixed z-50 px-4 flex items-center w-full h-14 bg-white border-b shadow-sm ">
-      <MobileSidebar />
+    <nav className="fixed z-50 px-4 flex items-center w-full h-14 bg-white border-b shadow-sm  justify-between">
       <div className="flex items-center gap-x-4">
+        <MobileSidebar />
         <div className="hidden md:flex">
           <Logo />
         </div>
@@ -28,7 +29,8 @@ const Navbar = () => {
           </Button>
         </FormPopover>
       </div>
-      <div className="ml-auto flex items-center gap-x-2">
+      <ClockRealTime />
+      <div className="flex items-center gap-x-2">
         <OrganizationSwitcher
           hidePersonal
           afterCreateOrganizationUrl="/organization/:id"
@@ -44,19 +46,19 @@ const Navbar = () => {
             },
           }}
         />
-      </div>
-      <UserButton
-        afterSignOutUrl="/"
-        appearance={{
-          elements: {
-            avatarImage: {
-              height: 30,
-              width: 30,
-              objectFit: 'contain',
+        <UserButton
+          afterSignOutUrl="/"
+          appearance={{
+            elements: {
+              avatarImage: {
+                height: 30,
+                width: 30,
+                objectFit: 'contain',
+              },
             },
-          },
-        }}
-      />
+          }}
+        />
+      </div>
     </nav>
   );
 };

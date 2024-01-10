@@ -1,7 +1,7 @@
 import { List } from '@prisma/client';
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
-import { MoreHorizontal, X } from 'lucide-react';
+import { Copy, MoreHorizontal, Plus, Trash, X } from 'lucide-react';
 import { FormSubmit } from '@/components/form/form-submit';
 import { Separator } from '@radix-ui/react-separator';
 import { useAction } from '@/hooks/useActions';
@@ -67,12 +67,14 @@ const ListOption = ({ data, onAddCard }: ListOptionProps) => {
           className="rounded-none w-full h-auto p-2 px-5 justify-start font-normal text-sm"
           variant="ghost"
         >
+          <Plus className="w-4 h-4 text-neutral-600 mr-2" />
           Add card
         </Button>
         <form action={onCopyListSubmit}>
           <input onChange={() => {}} hidden id="id" name="id" value={data.id} />
           <input onChange={() => {}} hidden id="boardId" name="boardId" value={data.boardId} />
           <FormSubmit className="rounded-none w-full h-auto p-2 px-5 justify-start font-normal text-sm" variant="ghost">
+            <Copy className="w-4 h-4 text-neutral-600 mr-2" />
             Copy list
           </FormSubmit>
         </form>
@@ -81,6 +83,7 @@ const ListOption = ({ data, onAddCard }: ListOptionProps) => {
           <input onChange={() => {}} hidden id="id" name="id" value={data.id} />
           <input onChange={() => {}} hidden id="boardId" name="boardId" value={data.boardId} />
           <FormSubmit className="rounded-none w-full h-auto p-2 px-5 justify-start font-normal text-sm" variant="ghost">
+            <Trash className="w-4 h-4 text-neutral-600 mr-2" />
             Delete list
           </FormSubmit>
         </form>

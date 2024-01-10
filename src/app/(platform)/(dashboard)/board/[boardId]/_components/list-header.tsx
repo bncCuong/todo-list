@@ -7,6 +7,8 @@ import { updateList } from '../../../../../../../actions/update-list';
 import { toast } from 'sonner';
 import ListOption from './list-option';
 import { useEditTitleInput } from '@/hooks/useEditTitle-input';
+import { Pencil } from 'lucide-react';
+import { Hint } from '@/components/ui/hint';
 
 export const ListHeader = ({ data, onAddCard }: { data: List; onAddCard: () => void }) => {
   const [title, setTitle] = useState(data.title);
@@ -61,6 +63,9 @@ export const ListHeader = ({ data, onAddCard }: { data: List; onAddCard: () => v
       ) : (
         <div onClick={enableEditting} className="w-full text-sm px-2.5 py-1 h-7 font-medium border-transparent">
           {title}
+          <Hint description="Edit title board" side="bottom" sideOffset={10}>
+            <Pencil className="w-3 h-3 ml-2" />
+          </Hint>
         </div>
       )}
       <ListOption data={data} onAddCard={onAddCard} />

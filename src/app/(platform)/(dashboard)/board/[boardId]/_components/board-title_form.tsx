@@ -8,6 +8,7 @@ import { updateBoard } from '../../../../../../../actions/update-board';
 import { useAction } from '@/hooks/useActions';
 import { toast } from 'sonner';
 import { useEditTitleInput } from '@/hooks/useEditTitle-input';
+import { useOnClickOutside } from 'usehooks-ts';
 
 export const BoardTitleFrom = ({ data }: { data: Board }) => {
   const formRef = useRef<ElementRef<'form'>>(null);
@@ -28,6 +29,7 @@ export const BoardTitleFrom = ({ data }: { data: Board }) => {
 
   const onSubmit = (formData: FormData) => {
     const title = formData.get('title') as string;
+    if (title === data.title) return;
     execute({ title, id: data.id });
   };
 
@@ -35,6 +37,8 @@ export const BoardTitleFrom = ({ data }: { data: Board }) => {
   const onBlur = () => {
     formRef.current?.requestSubmit();
   };
+
+  useOnClickOutside(inputRef, disableEditing);
 
   if (isEditing) {
     return (

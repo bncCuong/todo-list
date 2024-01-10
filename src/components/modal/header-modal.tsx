@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 'use client';
 import { ElementRef, useRef, useState } from 'react';
-import { Layout } from 'lucide-react';
+import { Layout, Pencil } from 'lucide-react';
 import { CardWithList } from '../../../types';
 import { FormInput } from '../form/form-input';
 import { Skeleton } from '../ui/skeleton';
@@ -10,6 +10,7 @@ import { useParams } from 'next/navigation';
 import { useAction } from '@/hooks/useActions';
 import { updateCard } from '../../../actions/update-card';
 import { toast } from 'sonner';
+import { Hint } from '../ui/hint';
 
 const HeaderModal = ({ data, onClose }: { data: CardWithList; onClose: () => void }) => {
   const [title, setTitle] = useState<string>(data?.title);
@@ -41,6 +42,17 @@ const HeaderModal = ({ data, onClose }: { data: CardWithList; onClose: () => voi
     const id = data.id;
 
     execute({ title, boardId, id });
+  };
+
+  const Label = () => {
+    return (
+      <div>
+        {title}
+        <Hint description="Edit title board" side="bottom" sideOffset={10}>
+          <Pencil className="w-4 h-4" />
+        </Hint>
+      </div>
+    );
   };
   return (
     <div className="flex gap-x-3 mb-6 w-full items-start">
