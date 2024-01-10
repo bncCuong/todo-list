@@ -10,8 +10,10 @@ import { redirect } from 'next/navigation';
 import { createAuditLog } from '@/lib/create-auditLog';
 import { ACTION, ENTITY_TYPE } from '@prisma/client';
 import { decreaseAvailabelCount } from '@/lib/org-limit';
+import { checkSubscription } from '@/lib/subscription';
 
 const hanler = async (data: InputType): Promise<ReturnType> => {
+  const isPro = await checkSubscription();
   const { orgId, userId } = auth();
   if (!orgId || !userId) {
     return { error: 'Unauthorized' };
@@ -28,7 +30,9 @@ const hanler = async (data: InputType): Promise<ReturnType> => {
         id,
       },
     });
-    await decreaseAvailabelCount();
+    if (!isPro) {
+      await decreaseAvailabelCount();
+    }
 
     await createAuditLog({
       entityTitle: board.title,

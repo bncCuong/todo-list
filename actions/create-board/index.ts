@@ -9,6 +9,7 @@ import { CreateBoard } from './schema';
 import { createAuditLog } from '@/lib/create-auditLog';
 import { ACTION, ENTITY_TYPE } from '@prisma/client';
 import { hasAvailabelCount, incrementAvailabelCount } from '@/lib/org-limit';
+import { checkSubscription } from '@/lib/subscription';
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const { userId, orgId } = auth();
@@ -19,9 +20,10 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   }
 
   //ham tra ve true hoac false xem cos the create board nua ko
-  const canCreate = await hasAvailabelCount();
+  let canCreate = await hasAvailabelCount();
+  const isPro = await checkSubscription();
 
-  if (!canCreate) {
+  if (!canCreate && !isPro) {
     return { error: 'You have reached your limit of free boards. Please upgrade to create more!' };
   }
   const { title, image } = data;
@@ -43,8 +45,10 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       },
     });
 
-    // khoi tao va bat dau +1 board
-    await incrementAvailabelCount();
+    if (!isPro) {
+      // khoi tao va bat dau +1 board
+      await incrementAvailabelCount();
+    }
 
     await createAuditLog({
       entityTitle: board.title,

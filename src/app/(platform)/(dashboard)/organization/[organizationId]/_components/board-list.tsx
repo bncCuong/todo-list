@@ -9,6 +9,7 @@ import { HelpCircle, User2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { BOARD_FREE } from '@/constant/board-count';
 import { getAvailabelCount } from '@/lib/org-limit';
+import { checkSubscription } from '@/lib/subscription';
 
 export const BoardList = async () => {
   const { orgId } = auth();
@@ -24,6 +25,8 @@ export const BoardList = async () => {
       createdAt: 'asc',
     },
   });
+
+  const isPro = await checkSubscription();
 
   const availabelCount = await getAvailabelCount();
   return (
@@ -51,7 +54,7 @@ export const BoardList = async () => {
             role="button"
           >
             <p className="text-sm"> Create new Board</p>
-            <span className="text-xs">{BOARD_FREE - availabelCount} Remaining</span>
+            {isPro ? 'Unlimited ' : <span className="text-xs">{BOARD_FREE - availabelCount} Remaining</span>}
             <Hint
               side="bottom"
               sideOffset={40}
