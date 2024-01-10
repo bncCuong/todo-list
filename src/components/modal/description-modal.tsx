@@ -84,7 +84,7 @@ export const DescriptionModal = ({ data }: { data: CardWithList }) => {
   );
 };
 
-DescriptionModal.Skeleton = () => {
+DescriptionModal.Skeleton = function DescriptionSkeleton() {
   return (
     <div className="flex items-start gap-x-3 w-full">
       <Skeleton className="w-6 h-6 mt-1 bg-neutral-200" />

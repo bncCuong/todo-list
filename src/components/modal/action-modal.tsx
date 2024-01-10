@@ -61,8 +61,7 @@ const ActionsModal = ({ data, onClose }: { data: CardWithList; onClose: () => vo
 
 export default ActionsModal;
 
-// eslint-disable-next-line react/display-name
-ActionsModal.Skeleton = () => {
+ActionsModal.Skeleton = function ActionsSkeleton() {
   return (
     <div className="flex flex-col ">
       <Skeleton className="w-20 h-8 bg-neutral-200" />

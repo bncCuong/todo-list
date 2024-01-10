@@ -6,10 +6,10 @@ import { CreditCard } from 'lucide-react';
 import Image from 'next/image';
 
 interface InfoProps {
-  isPro: boolean
+  isPro: boolean;
 }
 
-export const Info = ({isPro}: InfoProps) => {
+export const Info = ({ isPro }: InfoProps) => {
   const { organization, isLoaded } = useOrganization();
 
   if (!isLoaded) return <Info.Skeleton />;
@@ -23,14 +23,14 @@ export const Info = ({isPro}: InfoProps) => {
       <div className="space-y-1">
         <p className="text-xl font-semibold">{organization?.name}</p>
         <div className="text-muted-foreground flex text-xs items-center">
-          <CreditCard className="h-4 w-4 mr-1" /> {isPro ? "Pro": "Free"}
+          <CreditCard className="h-4 w-4 mr-1" /> {isPro ? 'Pro' : 'Free'}
         </div>
       </div>
     </div>
   );
 };
 
-Info.Skeleton = () => {
+Info.Skeleton = function SkeletonInfo() {
   return (
     <div className="flex items-center gap-x-4">
       <div className="w-[60px] h-[60px] relative">
@@ -46,3 +46,5 @@ Info.Skeleton = () => {
     </div>
   );
 };
+
+Info.displayName = 'Info';

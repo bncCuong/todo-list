@@ -69,7 +69,7 @@ export const BoardList = async () => {
   );
 };
 
-BoardList.Skeleton = () => {
+BoardList.Skeleton = function SkeletonBoardList() {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
       <Skeleton className="aspect-video h-full w-full p-2" />

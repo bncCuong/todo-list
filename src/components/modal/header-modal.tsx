@@ -64,7 +64,7 @@ const HeaderModal = ({ data, onClose }: { data: CardWithList; onClose: () => voi
 
 export default HeaderModal;
 
-HeaderModal.Skeleton = () => {
+HeaderModal.Skeleton = function HeaderSkeleton() {
   return (
     <div className="flex items-start gap-x-3 mb-6">
       <Skeleton className="w-6 h-6 mt-1 bg-neutral-200" />
