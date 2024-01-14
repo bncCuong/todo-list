@@ -1,11 +1,12 @@
 'use client';
 
-import { forwardRef } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { FormErrors } from './form-errors';
+import LoadingBar from 'react-top-loading-bar';
 
 interface FormInputProps {
   id: string;
@@ -22,9 +23,18 @@ interface FormInputProps {
 
 export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
   ({ id, className, defaultValue, disable, errors, label, onBlur, placeholder, require, type }, ref) => {
+    const [progress, setProgress] = useState(0);
+
     const { pending } = useFormStatus();
+    useEffect(() => {
+      if (pending) {
+        console.log(pending);
+        setProgress(100);
+      }
+    }, [pending]);
     return (
       <div className="space-y-2">
+        <LoadingBar color="#f11946" progress={progress} onLoaderFinished={() => setProgress(0)} />
         <div className="space-y-1">
           {label ? (
             <Label htmlFor={id} className="text-neutral-700 text-xs font-semibold ">

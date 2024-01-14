@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { FormPopover } from '@/components/form/form-popover';
@@ -10,8 +9,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { BOARD_FREE } from '@/constant/board-count';
 import { getAvailabelCount } from '@/lib/org-limit';
 import { checkSubscription } from '@/lib/subscription';
+import SearchInput from '@/components/search-input';
 
-export const BoardList = async () => {
+export const BoardList = async ({ query }: { query: string }) => {
   const { orgId } = auth();
   if (!orgId) {
     return redirect('/select-org');
@@ -20,19 +20,32 @@ export const BoardList = async () => {
   const boards = await db.board.findMany({
     where: {
       orgId,
+      title: { contains: query },
     },
     orderBy: {
       createdAt: 'asc',
     },
   });
 
+  if (boards.length == 0 && query !== '') {
+    return (
+      <div className="flex justify-between">
+        <p className="mt-1 text-lg font-semibold">No board has found</p>
+        <SearchInput />
+      </div>
+    );
+  }
   const isPro = await checkSubscription();
 
   const availabelCount = await getAvailabelCount();
+
   return (
     <div className="space-y-4">
-      <div className="flex items-center font-semibold text-lg text-neutral-700">
-        <User2 className="w-6 h-6 mr-2" /> Your Board ({boards.length})
+      <div className="flex items-center font-semibold text-lg text-neutral-700 justify-between">
+        <p className="flex gap-1">
+          <User2 className="w-6 h-6 mr-2" /> Your Board ({boards.length})
+        </p>
+        <SearchInput />
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         {boards.map((board) => {

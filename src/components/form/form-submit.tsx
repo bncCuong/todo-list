@@ -13,6 +13,7 @@ interface FormSubmitProps {
 
 export const FormSubmit = ({ children, variant = 'primary', className, disable }: FormSubmitProps) => {
   const { pending } = useFormStatus();
+  console.log(disable);
   return (
     <Button disabled={pending || disable} type="submit" variant={variant} size="sm" className={cn(className)}>
       {children}

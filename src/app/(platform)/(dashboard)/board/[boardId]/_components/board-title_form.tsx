@@ -8,7 +8,6 @@ import { updateBoard } from '../../../../../../../actions/update-board';
 import { useAction } from '@/hooks/useActions';
 import { toast } from 'sonner';
 import { useEditTitleInput } from '@/hooks/useEditTitle-input';
-import { useOnClickOutside } from 'usehooks-ts';
 
 export const BoardTitleFrom = ({ data }: { data: Board }) => {
   const formRef = useRef<ElementRef<'form'>>(null);
@@ -38,20 +37,21 @@ export const BoardTitleFrom = ({ data }: { data: Board }) => {
     formRef.current?.requestSubmit();
   };
 
-  useOnClickOutside(inputRef, disableEditing);
-
   if (isEditing) {
+
     return (
-      <form action={onSubmit} ref={formRef} className="flex items-center gap-x-2">
-        <FormInput
-          errors={fieldErrors}
-          ref={inputRef}
-          id="title"
-          defaultValue={title}
-          onBlur={onBlur}
-          className="text-lg font-bold px-[7px] pt-1 h-7 bg-transparent focus-visible:outline-none focus-visible:ring-white border-none "
-        />
-      </form>
+      <>
+        <form action={onSubmit} ref={formRef} className="flex items-center gap-x-2">
+          <FormInput
+            errors={fieldErrors}
+            ref={inputRef}
+            id="title"
+            defaultValue={title}
+            onBlur={onBlur}
+            className="text-lg font-bold px-[7px] pt-1 h-7 bg-transparent focus-visible:outline-none focus-visible:ring-white border-none "
+          />
+        </form>
+      </>
     );
   }
 
