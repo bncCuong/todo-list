@@ -31,7 +31,7 @@ export const BoardList = async ({ query }: { query: string }) => {
     return (
       <div className="flex justify-between">
         <p className="mt-1 text-lg font-semibold">No board has found</p>
-        <SearchInput />
+        <SearchInput placeHolder='Search board....' />
       </div>
     );
   }
@@ -45,7 +45,7 @@ export const BoardList = async ({ query }: { query: string }) => {
         <p className="flex gap-1">
           <User2 className="w-6 h-6 mr-2" /> Your Board ({boards.length})
         </p>
-        <SearchInput />
+        <SearchInput placeHolder='Search board....' />
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         {boards.map((board) => {
@@ -57,7 +57,7 @@ export const BoardList = async ({ query }: { query: string }) => {
               style={{ backgroundImage: `url(${board.imageThumbUrl})` }}
             >
               <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition" />
-              <p className="relative text-sm text-white underline">{board.title}</p>
+              <p className="relative text-xs text-white underline ">{board.title}</p>
             </Link>
           );
         })}

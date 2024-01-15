@@ -1,3 +1,5 @@
+"use client"
+
 import { List } from '@prisma/client';
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
@@ -8,7 +10,9 @@ import { useAction } from '@/hooks/useActions';
 import { deleteList } from '../../../../../../../actions/delete-list';
 import { toast } from 'sonner';
 import { copyList } from '../../../../../../../actions/copy-list';
-import { ElementRef, useRef } from 'react';
+import { ElementRef, useEffect, useRef, useState } from 'react';
+import { useFormStatus } from 'react-dom';
+import LoadingBar from 'react-top-loading-bar';
 
 interface ListOptionProps {
   data: List;
@@ -17,6 +21,8 @@ interface ListOptionProps {
 
 const ListOption = ({ data, onAddCard }: ListOptionProps) => {
   const closeRef = useRef<ElementRef<'button'>>(null);
+    const [progress, setProgress] = useState(0);
+
   //delete list
   const { execute: deleteListHanler } = useAction(deleteList, {
     onSuccess: (data) => {
@@ -50,6 +56,7 @@ const ListOption = ({ data, onAddCard }: ListOptionProps) => {
   };
   return (
     <Popover>
+      <LoadingBar color="#f11946" loaderSpeed={2500} transitionTime={2000} progress={progress} onLoaderFinished={() => setProgress(0)} />
       <PopoverTrigger asChild>
         <Button className="h-auto w-auto p-2" variant="ghost">
           <MoreHorizontal className="h-4 w-4" />
@@ -73,7 +80,7 @@ const ListOption = ({ data, onAddCard }: ListOptionProps) => {
         <form action={onCopyListSubmit}>
           <input onChange={() => {}} hidden id="id" name="id" value={data.id} />
           <input onChange={() => {}} hidden id="boardId" name="boardId" value={data.boardId} />
-          <FormSubmit className="rounded-none w-full h-auto p-2 px-5 justify-start font-normal text-sm" variant="ghost">
+          <FormSubmit className="rounded-none w-full h-auto p-2 px-5 justify-start font-normal text-sm" variant="ghost" setProgress={setProgress}>
             <Copy className="w-4 h-4 text-neutral-600 mr-2" />
             Copy list
           </FormSubmit>
@@ -82,7 +89,7 @@ const ListOption = ({ data, onAddCard }: ListOptionProps) => {
         <form action={onDeleListSubmit}>
           <input onChange={() => {}} hidden id="id" name="id" value={data.id} />
           <input onChange={() => {}} hidden id="boardId" name="boardId" value={data.boardId} />
-          <FormSubmit className="rounded-none w-full h-auto p-2 px-5 justify-start font-normal text-sm" variant="ghost">
+          <FormSubmit className="rounded-none w-full h-auto p-2 px-5 justify-start font-normal text-sm" variant="ghost" setProgress={setProgress}>
             <Trash className="w-4 h-4 text-neutral-600 mr-2" />
             Delete list
           </FormSubmit>

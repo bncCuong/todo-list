@@ -24,7 +24,7 @@ export const FormPopover = ({ children, align, side = 'bottom', sideOffset = 1 }
   const proModal = useProModal();
   const router = useRouter();
   const closeRef = useRef<ElementRef<'button'>>(null);
-  const { execute, fieldErrors } = useAction(createBoard, {
+  const { execute, fieldErrors , isLoading} = useAction(createBoard, {
     onSuccess: (data) => {
       toast.success('Create Successfuly');
       closeRef.current?.click();

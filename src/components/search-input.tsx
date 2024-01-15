@@ -5,8 +5,15 @@ import { useAction } from '@/hooks/useActions';
 import { toast } from 'sonner';
 import _ from 'lodash';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
-const SearchInput = () => {
+
+interface SearchInputProps {
+  placeHolder?: string;
+  className?: string
+}
+
+const SearchInput = ({className, placeHolder}:SearchInputProps ) => {
   const { replace } = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -28,8 +35,8 @@ const SearchInput = () => {
   return (
     <>
       <Input
-        className="my-2, max-w-[200px] shadow-sm"
-        placeholder="Search board name..."
+        className={cn("my-2 max-w-[200px] shadow-sm text-black", className)}
+        placeholder= {placeHolder}
         type="text"
         onChange={(e) => onSearchBoard(e)}
         defaultValue={searchParams.get('query')?.toString()}
