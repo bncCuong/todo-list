@@ -7,7 +7,7 @@ import { revalidatePath } from 'next/cache';
 import { createSafeAction } from '@/lib/create-safe-action';
 import { CreateBoard } from './schema';
 import { createAuditLog } from '@/lib/create-auditLog';
-import { ACTION, ENTITY_TYPE } from '@prisma/client';
+import { ACTION, ENTITY_TYPE, PRIORITY } from '@prisma/client';
 import { hasAvailabelCount, incrementAvailabelCount } from '@/lib/org-limit';
 import { checkSubscription } from '@/lib/subscription';
 
@@ -26,7 +26,12 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   if (!canCreate && !isPro) {
     return { error: 'You have reached your limit of free boards. Please upgrade to create more!' };
   }
-  const { title, image } = data;
+  const { title, image, priority } = data;
+
+  let _priority;
+  if (PRIORITY.hasOwnProperty(priority.toUpperCase())) {
+    _priority = PRIORITY[priority.toUpperCase()] as 'LOW' | 'MEDIUM' | 'HIGH';
+  }
   const [imageId, imageThumbUrl, imageFullUrl, imageLinkHTML, imageUserName] = image.split('|');
   if (!imageId || !imageThumbUrl || !imageFullUrl || !imageLinkHTML || !imageUserName) {
     return { error: 'Missing fields. Failed to create board' };
@@ -42,6 +47,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         imageFullUrl,
         imageLinkHTML,
         imageUserName,
+        priority: _priority,
       },
     });
 

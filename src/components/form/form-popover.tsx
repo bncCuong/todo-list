@@ -12,6 +12,7 @@ import { FormPicker } from './form-picker';
 import { ElementRef, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useProModal } from '@/hooks/useProModal';
+import FormCheckBox from './form-checkbox';
 
 interface PopoverProps {
   children: React.ReactNode;
@@ -24,8 +25,9 @@ export const FormPopover = ({ children, align, side = 'bottom', sideOffset = 1 }
   const proModal = useProModal();
   const router = useRouter();
   const closeRef = useRef<ElementRef<'button'>>(null);
-  const { execute, fieldErrors , isLoading} = useAction(createBoard, {
+  const { execute, fieldErrors, isLoading } = useAction(createBoard, {
     onSuccess: (data) => {
+      console.log(data);
       toast.success('Create Successfuly');
       closeRef.current?.click();
       router.push(`/board/${data.id}`);
@@ -38,6 +40,7 @@ export const FormPopover = ({ children, align, side = 'bottom', sideOffset = 1 }
   const onSubmit = (formData: FormData) => {
     const title = formData.get('title') as string;
     const image = formData.get('image') as string;
+    const priority = formData.get('priority') as string;
     if (title === '') {
       toast.warning('Title could not be empty');
       return;
@@ -46,7 +49,7 @@ export const FormPopover = ({ children, align, side = 'bottom', sideOffset = 1 }
       toast.warning('Pick someone image first!');
       return;
     }
-    execute({ title, image });
+    execute({ title, image, priority });
   };
 
   return (
@@ -63,6 +66,7 @@ export const FormPopover = ({ children, align, side = 'bottom', sideOffset = 1 }
           <FormPicker id="image" errors={fieldErrors} />
           <div className="space-y-4">
             <FormInput id="title" label="Board title" type="text" errors={fieldErrors} />
+            <FormCheckBox id="priority" />
           </div>
           <FormSubmit className="w-full">Create</FormSubmit>
         </form>
