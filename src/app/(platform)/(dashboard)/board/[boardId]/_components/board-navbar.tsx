@@ -6,6 +6,7 @@ import { Pencil } from 'lucide-react';
 import { Hint } from '@/components/ui/hint';
 import SearchInput from '@/components/search-input';
 import { cn } from '@/lib/utils';
+import FormCheckBox from '@/components/form/form-checkbox';
 
 interface BoardNavbarProps {
   _data: Board;
@@ -20,7 +21,7 @@ const BoardNavbar = async ({ _data }: BoardNavbarProps) => {
           ? 'bg-gradient-to-r from-emerald-500 to-lime-600'
           : _data.priority === 'HIGH'
           ? 'bg-gradient-to-br from-pink-500 via-pink-400 to-purple-800'
-          : '',
+          : 'bg-black/50 ',
       )}
     >
       <div>
@@ -31,6 +32,8 @@ const BoardNavbar = async ({ _data }: BoardNavbarProps) => {
       </div>
 
       {_data.priority && <h2 className="font-bold">Priority: {_data.priority}</h2>}
+
+      <FormCheckBox id="filter_priority" className="max-w-[200px] " title="Priority Filter" />
 
       <div className=" flex gap-4">
         <SearchInput placeHolder="Search list...." />

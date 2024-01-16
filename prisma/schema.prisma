@@ -12,6 +12,7 @@ enum PRIORITY {
   LOW 
   MEDIUM
   HIGH
+  FREE
 }
 
 model Board {
@@ -24,7 +25,7 @@ model Board {
   imageUserName String        @db.Text
   imageLinkHTML String        @db.Text
   lists         List[]
-  priority      PRIORITY?
+  priority      PRIORITY?     
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 }

@@ -75,6 +75,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     return { error: 'Something went wrong!' };
   }
 
+
   revalidatePath(`/organization/${orgId}`);
   return { data: url };
 };

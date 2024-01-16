@@ -16,5 +16,5 @@ export const CreateBoard = z.object({
     required_error: 'Image is require',
     invalid_type_error: 'Image is require',
   }),
-  priority: z.string(),
+  priority: z.optional(z.string()),
 });

@@ -9,6 +9,7 @@ import ListOption from './list-option';
 import { useEditTitleInput } from '@/hooks/useEditTitle-input';
 import { Pencil } from 'lucide-react';
 import { Hint } from '@/components/ui/hint';
+import { cn } from '@/lib/utils';
 
 export const ListHeader = ({ data, onAddCard }: { data: List; onAddCard: () => void }) => {
   const [title, setTitle] = useState(data.title);
@@ -16,9 +17,9 @@ export const ListHeader = ({ data, onAddCard }: { data: List; onAddCard: () => v
   const formRef = useRef<ElementRef<'form'>>(null);
   const { isEditing, disableEditing, enableEditting, onKeyDown } = useEditTitleInput(inputRef);
   const { execute } = useAction(updateList, {
-    onSuccess: (data) => {
-      toast.success(`Rename to "${data.title}" `);
-      setTitle(data.title);
+    onSuccess: (_data) => {
+      toast.success(`Rename to "${_data.title}" `);
+      setTitle(_data.title);
       disableEditing();
     },
     onError: (error) => {
@@ -33,6 +34,10 @@ export const ListHeader = ({ data, onAddCard }: { data: List; onAddCard: () => v
     const title = formData.get('title') as string;
     const boardId = formData.get('boardId') as string;
     const id = data.id;
+    if (title === '') {
+      toast.warning('Title is require!');
+      return;
+    }
     if (title === data.title) {
       return disableEditing();
     }
@@ -43,9 +48,17 @@ export const ListHeader = ({ data, onAddCard }: { data: List; onAddCard: () => v
   const onBlur = () => {
     formRef.current?.requestSubmit();
   };
-
   return (
-    <div className="pt-2 px-2 flex justify-between items-start text-sm font-semibold gap-x-2">
+    <div
+      className={cn(
+        'pt-2 px-2 flex justify-between items-start text-sm font-semibold gap-x-2',
+        data.priority === 'MEDIUM'
+          ? 'bg-gradient-to-r from-emerald-500 to-lime-600'
+          : data.priority === 'HIGH'
+          ? 'bg-gradient-to-br from-pink-500 via-pink-400 to-purple-800'
+          : 'bg-black/50 ',
+      )}
+    >
       {isEditing ? (
         <form action={onSubmit} className="flex-1 px-[2px]" ref={formRef}>
           <input hidden id="id" name="id" value={data.id} onChange={() => {}} />
@@ -56,12 +69,13 @@ export const ListHeader = ({ data, onAddCard }: { data: List; onAddCard: () => v
             placeholder="Enter list title..."
             id="title"
             defaultValue={data.title}
+            className="mb-2"
           />
 
           <button hidden type="submit" />
         </form>
       ) : (
-        <div onClick={enableEditting} className="w-full text-sm px-2.5 py-1 h-7 font-medium border-transparent">
+        <div onClick={enableEditting} className="w-full text-sm px-2.5 py-1 h-7 font-medium border-transparent ">
           {title}
           <Hint description="Edit title board" side="bottom" sideOffset={10}>
             <Pencil className="w-3 h-3 ml-2" />

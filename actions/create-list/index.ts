@@ -8,7 +8,7 @@ import { createSafeAction } from '@/lib/create-safe-action';
 import { CreateList } from './schema';
 import { error } from 'console';
 import { createAuditLog } from '@/lib/create-auditLog';
-import { ACTION, ENTITY_TYPE } from '@prisma/client';
+import { ACTION, ENTITY_TYPE, PRIORITY } from '@prisma/client';
 
 const hanler = async (data: InputType): Promise<ReturnType> => {
   const { orgId, userId } = auth();
@@ -16,8 +16,18 @@ const hanler = async (data: InputType): Promise<ReturnType> => {
     return { error: 'Unauthorized' };
   }
 
-  const { title, boardId } = data;
-
+  const { title, boardId, priority } = data;
+  console.log(priority);
+  let _priority;
+  if (priority === 'high') {
+    _priority = PRIORITY.HIGH;
+  }
+  if (priority === 'medium') {
+    _priority = PRIORITY.MEDIUM;
+  }
+  if (priority === 'low') {
+    _priority = PRIORITY.LOW;
+  }
   let list;
 
   try {
@@ -44,6 +54,7 @@ const hanler = async (data: InputType): Promise<ReturnType> => {
         title,
         boardId,
         order: newOrder,
+        priority: _priority,
       },
     });
     await createAuditLog({

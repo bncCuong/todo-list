@@ -12,6 +12,7 @@ import { checkSubscription } from '@/lib/subscription';
 import SearchInput from '@/components/search-input';
 import FormCheckBox from '@/components/form/form-checkbox';
 import { PRIORITY } from '@prisma/client';
+import { cn } from '@/lib/utils';
 
 export const BoardList = async ({ query, priority }: { query: string; priority: string }) => {
   const { orgId } = auth();
@@ -49,14 +50,14 @@ export const BoardList = async ({ query, priority }: { query: string; priority: 
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center font-semibold text-lg text-neutral-700 justify-between">
+      <div className="space-y-4 lg:space-y-0 lg:flex items-center font-semibold text-lg text-neutral-700 justify-between">
         <p className="flex gap-1 min-w-[190px]">
           <User2 className="w-6 h-6 mr-2" /> Your Board ({boards.length})
         </p>
-        <FormCheckBox id="priority" type="checkbox" className="mr-2 max-w-[210px] pb-2" title="Priority filter" />
-        <SearchInput placeHolder="Search board...." />
+        <FormCheckBox id="priority" className="mr-2 lg:max-w-[210px] pb-2" title="Priority filter" />
+        <SearchInput placeHolder="Search board...." className="w-full" />
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 ">
         {boards.map((board) => {
           return (
             <Link
@@ -66,7 +67,28 @@ export const BoardList = async ({ query, priority }: { query: string; priority: 
               style={{ backgroundImage: `url(${board.imageThumbUrl})` }}
             >
               <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition" />
-              <p className="relative text-xs text-white underline ">{board.title}</p>
+              <div className="flex items-center gap-1">
+                <p className="relative text-xs text-white underline ">{board.title}</p>
+                {board.priority && board.priority !== 'FREE' ? (
+                  <>
+                    <p>-</p>
+                    <p
+                      className={cn(
+                        'font-semibold text-sm',
+                        board.priority === 'HIGH'
+                          ? 'text-red-700'
+                          : board.priority === 'MEDIUM'
+                          ? 'text-green-500'
+                          : 'text-white',
+                      )}
+                    >
+                      {board.priority.toLocaleLowerCase()}
+                    </p>
+                  </>
+                ) : (
+                  ''
+                )}
+              </div>
             </Link>
           );
         })}

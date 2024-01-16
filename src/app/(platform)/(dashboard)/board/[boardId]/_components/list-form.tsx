@@ -12,6 +12,7 @@ import { useAction } from '@/hooks/useActions';
 import { createList } from '../../../../../../../actions/create-list';
 import { toast } from 'sonner';
 import { useEditTitleInput } from '@/hooks/useEditTitle-input';
+import FormRadio from '@/components/form/form-radio';
 
 export const ListForm = () => {
   const params = useParams();
@@ -39,7 +40,9 @@ export const ListForm = () => {
   const onSubmit = (formData: FormData) => {
     const boardId = formData.get('boardId') as string;
     const title = formData.get('title') as string;
-    execute({ title, boardId });
+    let priority = formData.get('priority') as string;
+    if (priority === null) priority = '';
+    execute({ title, boardId, priority });
   };
 
   if (isEditing) {
@@ -54,6 +57,7 @@ export const ListForm = () => {
             placeholder="Enter list title..."
           />
           <input hidden value={params.boardId} name="boardId" onChange={() => {}} />
+          <FormRadio id="priority" className="mx-2" />
           <div className="flex items-center gap-1">
             <FormSubmit variant="gradient">Add list</FormSubmit>
             <Button onClick={disableEditing} size="sm" variant="ghost">

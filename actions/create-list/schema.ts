@@ -10,4 +10,5 @@ export const CreateList = z.object({
       message: 'Title too short!',
     }),
   boardId: z.string(),
+  priority: z.optional(z.string()),
 });

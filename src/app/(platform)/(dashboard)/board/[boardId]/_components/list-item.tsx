@@ -33,7 +33,7 @@ export const ListItem = ({ data, index }: { data: ListWithCard; index: number })
     <Draggable draggableId={data.id} index={index}>
       {(provided) => (
         <li {...provided.dragHandleProps} ref={provided.innerRef} className="shrink-0 w-[250px] select-none">
-          <div {...provided.draggableProps} className="w-full rounded-md bg-[#f1f2f4] shadow-md pb-2">
+          <div {...provided.draggableProps} className="w-full rounded-md bg-[#f1f2f4] shadow-md pb-2 overflow-hidden">
             <ListHeader onAddCard={enableEditting} data={data} />
             <Droppable droppableId={data.id} type="card">
               {(provided) => (

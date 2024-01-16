@@ -4,6 +4,7 @@ import { Input } from './ui/input';
 import _ from 'lodash';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { Search } from 'lucide-react';
 
 interface SearchInputProps {
   placeHolder?: string;
@@ -30,15 +31,15 @@ const SearchInput = ({ className, placeHolder }: SearchInputProps) => {
   };
 
   return (
-    <>
+    <div className="flex items-center relative">
       <Input
-        className={cn('my-2 max-w-[200px] shadow-sm text-black', className)}
+        className={cn('my-2 lg:max-w-[200px] shadow-sm text-black', className)}
         placeholder={placeHolder}
         type="text"
         onChange={(e) => onSearchBoard(e)}
         defaultValue={searchParams.get('query')?.toString()}
       />
-    </>
+    </div>
   );
 };
 

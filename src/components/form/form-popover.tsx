@@ -12,7 +12,7 @@ import { FormPicker } from './form-picker';
 import { ElementRef, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useProModal } from '@/hooks/useProModal';
-import FormCheckBox from './form-checkbox';
+import FormRadio from './form-radio';
 
 interface PopoverProps {
   children: React.ReactNode;
@@ -39,7 +39,7 @@ export const FormPopover = ({ children, align, side = 'bottom', sideOffset = 1 }
   const onSubmit = (formData: FormData) => {
     const title = formData.get('title') as string;
     const image = formData.get('image') as string;
-    const priority = formData.get('priority') as string;
+    let priority = formData.get('priority') as string;
     if (title === '') {
       toast.warning('Title could not be empty');
       return;
@@ -47,6 +47,9 @@ export const FormPopover = ({ children, align, side = 'bottom', sideOffset = 1 }
     if (!image) {
       toast.warning('Pick someone image first!');
       return;
+    }
+    if (priority === null) {
+      priority = '';
     }
     execute({ title, image, priority });
   };
@@ -65,7 +68,7 @@ export const FormPopover = ({ children, align, side = 'bottom', sideOffset = 1 }
           <FormPicker id="image" errors={fieldErrors} />
           <div className="space-y-4">
             <FormInput id="title" label="Board title" type="text" errors={fieldErrors} />
-            <FormCheckBox id="priority" type="radio" />
+            <FormRadio id="priority" />
           </div>
           <FormSubmit variant="gradient" className="w-full overflow-hidden me-0">
             Create

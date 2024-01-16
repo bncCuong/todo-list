@@ -51,6 +51,7 @@ const hanler = async (data: InputType): Promise<ReturnType> => {
         boardId: listCopy.boardId,
         title: `${listCopy.title} - Copy`,
         order: newOrder,
+        priority: listCopy.priority,
         cards: {
           createMany: {
             data: listCopy.cards.map((card) => ({
@@ -64,12 +65,12 @@ const hanler = async (data: InputType): Promise<ReturnType> => {
       include: { cards: true },
     });
 
-     await createAuditLog({
-       entityTitle: list.title,
-       entityId: list.id,
-       action: ACTION.CREATE,
-       entityType: ENTITY_TYPE.LIST,
-     });
+    await createAuditLog({
+      entityTitle: list.title,
+      entityId: list.id,
+      action: ACTION.CREATE,
+      entityType: ENTITY_TYPE.LIST,
+    });
   } catch (error) {
     return { error: 'Error to copy!' };
   }
