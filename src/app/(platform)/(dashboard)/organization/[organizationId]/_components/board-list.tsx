@@ -10,17 +10,24 @@ import { BOARD_FREE } from '@/constant/board-count';
 import { getAvailabelCount } from '@/lib/org-limit';
 import { checkSubscription } from '@/lib/subscription';
 import SearchInput from '@/components/search-input';
+import FormCheckBox from '@/components/form/form-checkbox';
+import { PRIORITY } from '@prisma/client';
 
-export const BoardList = async ({ query }: { query: string }) => {
+export const BoardList = async ({ query, priority }: { query: string; priority: string }) => {
   const { orgId } = auth();
   if (!orgId) {
     return redirect('/select-org');
   }
-
+  let arrFillter: PRIORITY[] = [];
+  const priorityValues = priority.toUpperCase().split(',');
+  if (priorityValues.length > 0 && priorityValues[0] !== '') {
+    arrFillter = priorityValues.map((value) => value as PRIORITY);
+  }
   const boards = await db.board.findMany({
     where: {
       orgId,
       title: { contains: query },
+      ...(arrFillter.length > 0 && { priority: { in: arrFillter } }),
     },
     orderBy: {
       createdAt: 'asc',
@@ -31,10 +38,11 @@ export const BoardList = async ({ query }: { query: string }) => {
     return (
       <div className="flex justify-between">
         <p className="mt-1 text-lg font-semibold">No board has found</p>
-        <SearchInput placeHolder='Search board....' />
+        <SearchInput placeHolder="Search board...." />
       </div>
     );
   }
+
   const isPro = await checkSubscription();
 
   const availabelCount = await getAvailabelCount();
@@ -42,10 +50,11 @@ export const BoardList = async ({ query }: { query: string }) => {
   return (
     <div className="space-y-4">
       <div className="flex items-center font-semibold text-lg text-neutral-700 justify-between">
-        <p className="flex gap-1">
+        <p className="flex gap-1 min-w-[190px]">
           <User2 className="w-6 h-6 mr-2" /> Your Board ({boards.length})
         </p>
-        <SearchInput placeHolder='Search board....' />
+        <FormCheckBox id="priority" type="checkbox" className="mr-2 max-w-[210px] pb-2" title="Priority filter" />
+        <SearchInput placeHolder="Search board...." />
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         {boards.map((board) => {

@@ -50,14 +50,14 @@ export const ListForm = () => {
             ref={inputRef}
             errors={fieldErrors}
             id="title"
-            className="text-sm px-2 py-1 h-7 font-medium border-transparent hover:border-input focus:border-input transition"
+            className="text-sm px-2 py-1.5 h-7 font-medium border-transparent hover:border-input focus:border-input transition"
             placeholder="Enter list title..."
           />
           <input hidden value={params.boardId} name="boardId" onChange={() => {}} />
-          <div className="flex items-center space-x-3">
-            <FormSubmit>Add list</FormSubmit>
+          <div className="flex items-center gap-1">
+            <FormSubmit variant="gradient">Add list</FormSubmit>
             <Button onClick={disableEditing} size="sm" variant="ghost">
-              <X className="w-4 h-4 mr-2" />
+              <X className="w-4 h-4 " />
             </Button>
           </div>
         </form>

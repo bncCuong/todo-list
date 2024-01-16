@@ -3,22 +3,41 @@
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useAction } from '@/hooks/useActions';
-import { MoreHorizontal, Trash, X } from 'lucide-react';
+import { Hammer, MoreHorizontal, Save, SaveIcon, Trash, X } from 'lucide-react';
 import { deleteBoard } from '../../../../../../../actions/delete-board';
-import { redirect } from 'next/navigation';
-import { auth } from '@clerk/nextjs';
 import { toast } from 'sonner';
-import { useFormStatus } from 'react-dom';
+import FormCheckBox from '@/components/form/form-checkbox';
+import { updateBoard } from '../../../../../../../actions/update-board';
+import { FormSubmit } from '@/components/form/form-submit';
+import { Separator } from '@/components/ui/separator';
 
-const BoardOption = ({ id }: { id: string }) => {
-  const { execute, isLoading } = useAction(deleteBoard, {
-    onSuccess: (data) => {
+const BoardOption = ({ id, _priority }: { id: string; _priority?: string | null }) => {
+  const { execute: deleExcute, isLoading: deleLoading } = useAction(deleteBoard, {
+    onSuccess: () => {
       toast.success('Delete board successfuly');
     },
     onError: (error) => {
       toast.error(error);
     },
   });
+
+  const { execute: _updateBoard, isLoading: updateLoading } = useAction(updateBoard, {
+    onSuccess: (data) => {
+      toast.success(`Priority of ${data.title} updated`);
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
+
+  const onSubmitPriority = (formData: FormData) => {
+    const priority = formData.get('priority') as string;
+    if (priority.toUpperCase() === _priority) {
+      toast.warning(`Priority of current board is "${_priority}"`);
+      return;
+    }
+    _updateBoard({ id, priority });
+  };
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -26,19 +45,27 @@ const BoardOption = ({ id }: { id: string }) => {
           <MoreHorizontal className="w-4 h-4" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="px-0 pt-3 pb-3 relative" side="bottom" align="start">
+      <PopoverContent className="px-0 pt-3 pb-3 relative mr-6 " side="bottom" align="start">
         <div className="text-sm font-medium text-center text-neutral-600 pb-4">Board action</div>
         <PopoverClose asChild>
           <Button variant="ghost" className="absolute top-1 right-1">
             <X className="w-4 h-4" />
           </Button>
         </PopoverClose>
+        <form action={onSubmitPriority} className="h-auto w-full">
+          <FormCheckBox id="priority" className="px-5" type="radio" />
+          <FormSubmit variant="ghost" className="w-full  mb-2 justify-start font-normal text-base">
+            <Hammer className="w-4 h-4 mx-1 text-neutral-600" />
+            Save Priority
+          </FormSubmit>
+        </form>
+        <Separator />
         <Button
-          disabled={isLoading}
+          disabled={deleLoading}
           variant="ghost"
-          className="h-auto w-full p-2 px-5 justify-start font-normal text-base"
+          className="h-auto w-full px-5 justify-start font-normal text-base mt-2"
           onClick={() => {
-            execute({ id });
+            deleExcute({ id });
           }}
         >
           <Trash className="w-4 h-4 mr-1 text-neutral-600" />

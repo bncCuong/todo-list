@@ -6,8 +6,10 @@ import { BoardList } from './_components/board-list';
 import { Suspense } from 'react';
 import { checkSubscription } from '@/lib/subscription';
 
-const OrganizationIdPage = async ({ searchParams }: { searchParams: { query: string } }) => {
+const OrganizationIdPage = async ({ searchParams }: { searchParams: { query?: string; priority?: string } }) => {
   const query = searchParams?.query || '';
+  const priority = searchParams.priority || '';
+
   const isPro = await checkSubscription();
   return (
     <div className="w-full bg-slate-500/10 h-[95%] p-10 rounded-lg shadow-xl">
@@ -15,7 +17,7 @@ const OrganizationIdPage = async ({ searchParams }: { searchParams: { query: str
       <Separator className="my-4 bg-black/60 shadow-md" />
       <div className="px-2 md:px-4">
         <Suspense fallback={<BoardList.Skeleton />}>
-          <BoardList query={query} />
+          <BoardList query={query} priority={priority} />
         </Suspense>
       </div>
     </div>

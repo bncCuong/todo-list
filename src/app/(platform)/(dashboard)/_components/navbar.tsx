@@ -11,7 +11,6 @@ import ClockRealTime from '@/components/clock-realtime';
 import { useFormStatus } from 'react-dom';
 
 const Navbar = () => {
-  
   return (
     <nav className="fixed z-50 px-4 flex items-center w-full h-14 bg-white border-b shadow-sm  justify-between">
       <div className="flex items-center gap-x-4">
@@ -20,7 +19,7 @@ const Navbar = () => {
           <Logo />
         </div>
         <FormPopover align="start" side="bottom" sideOffset={18}>
-          <Button className="rounded-sm hidden md:block h-auto py-1.5 px-2" size="sm" variant="primary">
+          <Button className="rounded-sm hidden md:block h-auto py-1.5 px-2" size="sm" variant="gradient">
             Create
           </Button>
         </FormPopover>

@@ -27,7 +27,6 @@ export const FormPopover = ({ children, align, side = 'bottom', sideOffset = 1 }
   const closeRef = useRef<ElementRef<'button'>>(null);
   const { execute, fieldErrors, isLoading } = useAction(createBoard, {
     onSuccess: (data) => {
-      console.log(data);
       toast.success('Create Successfuly');
       closeRef.current?.click();
       router.push(`/board/${data.id}`);
@@ -66,9 +65,11 @@ export const FormPopover = ({ children, align, side = 'bottom', sideOffset = 1 }
           <FormPicker id="image" errors={fieldErrors} />
           <div className="space-y-4">
             <FormInput id="title" label="Board title" type="text" errors={fieldErrors} />
-            <FormCheckBox id="priority" />
+            <FormCheckBox id="priority" type="radio" />
           </div>
-          <FormSubmit className="w-full">Create</FormSubmit>
+          <FormSubmit variant="gradient" className="w-full overflow-hidden me-0">
+            Create
+          </FormSubmit>
         </form>
       </PopoverContent>
     </Popover>

@@ -64,10 +64,10 @@ const CardForm = forwardRef<HTMLTextAreaElement, CardFormProp>(
             errors={fieldErrors}
           />
           <input onChange={() => {}} hidden id="listId" name="listId" value={listId} />
-          <div className="flex items-center gap-x-1">
-            <FormSubmit>Add card</FormSubmit>
+          <div className="inline-flex items-center gap-x-1">
+            <FormSubmit variant="gradient">Add card</FormSubmit>
             <Button onClick={disableEditing} size="sm" variant="ghost">
-              <X className="w-4 h-4 ml-2" />
+              <X className="w-4 h-4 mb-1" />
             </Button>
           </div>
         </form>
