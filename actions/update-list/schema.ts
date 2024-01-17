@@ -13,5 +13,5 @@ export const UpdateList = z.object({
   ),
   id: z.string(),
   boardId: z.string(),
-  priority: z.string(),
+  priority: z.optional(z.string()),
 });
