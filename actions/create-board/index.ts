@@ -29,8 +29,14 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   const { title, image, priority } = data;
 
   let _priority;
-  if (priority !== undefined && PRIORITY.hasOwnProperty(priority.toUpperCase())) {
-    _priority = PRIORITY[priority.toUpperCase()] as 'LOW' | 'MEDIUM' | 'HIGH' | 'FREE';
+  if (priority === 'high') {
+    _priority = PRIORITY.HIGH;
+  }
+  if (priority === 'medium') {
+    _priority = PRIORITY.MEDIUM;
+  }
+  if (priority === 'low') {
+    _priority = PRIORITY.LOW;
   }
   const [imageId, imageThumbUrl, imageFullUrl, imageLinkHTML, imageUserName] = image.split('|');
   if (!imageId || !imageThumbUrl || !imageFullUrl || !imageLinkHTML || !imageUserName) {

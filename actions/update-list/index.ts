@@ -7,7 +7,7 @@ import { revalidatePath } from 'next/cache';
 import { createSafeAction } from '@/lib/create-safe-action';
 import { UpdateList } from './schema';
 import { createAuditLog } from '@/lib/create-auditLog';
-import { ACTION, ENTITY_TYPE } from '@prisma/client';
+import { ACTION, ENTITY_TYPE, PRIORITY } from '@prisma/client';
 
 const hanler = async (data: InputType): Promise<ReturnType> => {
   const { orgId, userId } = auth();
@@ -15,8 +15,17 @@ const hanler = async (data: InputType): Promise<ReturnType> => {
     return { error: 'Unauthorized' };
   }
 
-  const { title, id, boardId } = data;
-
+  const { title, id, boardId, priority } = data;
+  let _priority;
+  if (priority === 'high') {
+    _priority = PRIORITY.HIGH;
+  }
+  if (priority === 'medium') {
+    _priority = PRIORITY.MEDIUM;
+  }
+  if (priority === 'low') {
+    _priority = PRIORITY.LOW;
+  }
   let list;
 
   try {
@@ -30,6 +39,7 @@ const hanler = async (data: InputType): Promise<ReturnType> => {
       },
       data: {
         title,
+        priority: _priority,
       },
     });
     await createAuditLog({

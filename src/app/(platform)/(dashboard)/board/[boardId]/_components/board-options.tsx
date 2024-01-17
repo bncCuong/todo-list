@@ -11,8 +11,9 @@ import { updateBoard } from '../../../../../../../actions/update-board';
 import { FormSubmit } from '@/components/form/form-submit';
 import { Separator } from '@/components/ui/separator';
 import FormRadio from '@/components/form/form-radio';
+import { PRIORITY } from '@prisma/client';
 
-const BoardOption = ({ id, _priority }: { id: string; _priority?: string | null }) => {
+const BoardOption = ({ id, _priority }: { id: string; _priority?: PRIORITY | null }) => {
   const { execute: deleExcute, isLoading: deleLoading } = useAction(deleteBoard, {
     onSuccess: () => {
       toast.success('Delete board successfuly');
@@ -54,7 +55,7 @@ const BoardOption = ({ id, _priority }: { id: string; _priority?: string | null 
           </Button>
         </PopoverClose>
         <form action={onSubmitPriority} className="h-auto w-full">
-          <FormRadio id="priority" className="px-5" />
+          <FormRadio id="priority" className="px-5" currentPriority={_priority} />
           <FormSubmit variant="ghost" className="w-full  mb-2 justify-start font-normal text-base">
             <Hammer className="w-4 h-4 mx-1 text-neutral-600" />
             Save Priority

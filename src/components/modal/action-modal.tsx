@@ -1,6 +1,6 @@
 'use client';
 
-import { Copy, Hand, Trash } from 'lucide-react';
+import { CheckSquare, Copy, Hand, Square, Trash } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
 import { useAction } from '@/hooks/useActions';
@@ -9,6 +9,7 @@ import { copyCard } from '../../../actions/copy-card';
 import { useParams } from 'next/navigation';
 import { CardWithList } from '../../../types';
 import { toast } from 'sonner';
+import { updateCard } from '../../../actions/update-card';
 
 const ActionsModal = ({ data, onClose }: { data: CardWithList; onClose: () => void }) => {
   const params = useParams();
@@ -33,7 +34,17 @@ const ActionsModal = ({ data, onClose }: { data: CardWithList; onClose: () => vo
     },
   });
 
-  let loading = deleteLoading || copyLoading;
+  const { execute: executeComple, isLoading: compleLoading } = useAction(updateCard, {
+    onSuccess: (_data) => {
+      if (_data.completed) toast.success(`Congratulation. Card ${_data.title} completed!!`);
+      onClose();
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
+
+  let loading = deleteLoading || copyLoading || compleLoading;
   const boardId = params.boardId as string;
   const id = data.id;
   const onCopyCardHanler = () => {
@@ -43,12 +54,28 @@ const ActionsModal = ({ data, onClose }: { data: CardWithList; onClose: () => vo
   const onDeleteCardHanler = () => {
     executeDeleteCard({ boardId, id });
   };
+
+  const onCompleteHanler = () => {
+    const completed = !data.completed as boolean;
+    executeComple({ boardId, id, completed });
+  };
   return (
     <div className="flex flex-col ml-10 md:ml-0 min-w-[120px]">
       <div className=" flex items-center gap-2">
         <Hand className="w-4 h-4 mb-1" />
         <p className="font-semibold mb-1">Action:</p>
       </div>
+      <Button disabled={loading} className="" variant="primary" onClick={onCompleteHanler}>
+        {data.completed ? (
+          <p className="flex items-center gap-1">
+            <Square className="w-4 h-4 mr-2 " /> Incomplete
+          </p>
+        ) : (
+          <p className="flex items-center gap-1">
+            <CheckSquare className="w-4 h-4 mr-2 " /> Completed
+          </p>
+        )}
+      </Button>
       <Button disabled={loading} className="my-1" onClick={onCopyCardHanler}>
         <Copy className="w-4 h-4 mr-2" /> Copy
       </Button>

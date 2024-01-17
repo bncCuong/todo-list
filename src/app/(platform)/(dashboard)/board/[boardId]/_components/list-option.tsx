@@ -1,18 +1,19 @@
 'use client';
 
+import { ElementRef, useEffect, useRef, useState } from 'react';
 import { List } from '@prisma/client';
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
-import { Copy, MoreHorizontal, Plus, Trash, X } from 'lucide-react';
+import { Copy, Hammer, MoreHorizontal, Plus, Trash, X } from 'lucide-react';
 import { FormSubmit } from '@/components/form/form-submit';
 import { Separator } from '@radix-ui/react-separator';
 import { useAction } from '@/hooks/useActions';
-import { deleteList } from '../../../../../../../actions/delete-list';
 import { toast } from 'sonner';
-import { copyList } from '../../../../../../../actions/copy-list';
-import { ElementRef, useEffect, useRef, useState } from 'react';
-import { useFormStatus } from 'react-dom';
 import LoadingBar from 'react-top-loading-bar';
+import FormRadio from '@/components/form/form-radio';
+import { deleteList } from '../../../../../../../actions/delete-list';
+import { copyList } from '../../../../../../../actions/copy-list';
+import { updateList } from '../../../../../../../actions/update-list';
 
 interface ListOptionProps {
   data: List;
@@ -22,6 +23,17 @@ interface ListOptionProps {
 const ListOption = ({ data, onAddCard }: ListOptionProps) => {
   const closeRef = useRef<ElementRef<'button'>>(null);
   const [progress, setProgress] = useState(0);
+
+  //Change priority
+  const { execute: changePriority } = useAction(updateList, {
+    onSuccess: (data) => {
+      toast.success(`Priority of list ${data.title} changed`);
+      closeRef.current?.click();
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
 
   //delete list
   const { execute: deleteListHanler } = useAction(deleteList, {
@@ -54,6 +66,21 @@ const ListOption = ({ data, onAddCard }: ListOptionProps) => {
     const boardId = formData.get('boardId') as string;
     deleteListHanler({ id, boardId });
   };
+
+  const onChangePriority = (formData: FormData) => {
+    const id = formData.get('id') as string;
+    const boardId = formData.get('boardId') as string;
+    const priority = formData.get('priority') as string;
+    if (priority === undefined || priority === null) {
+      toast.error('Choose priority!');
+      return;
+    }
+    if (data.priority === priority.toUpperCase()) {
+      toast.error(`Current Priority is "${priority.toUpperCase()}"`);
+      return;
+    }
+    changePriority({ id, boardId, priority });
+  };
   return (
     <Popover>
       <LoadingBar
@@ -75,6 +102,20 @@ const ListOption = ({ data, onAddCard }: ListOptionProps) => {
             <X className="w-4 h-4" />
           </Button>
         </PopoverClose>
+        <form action={onChangePriority}>
+          <input onChange={() => {}} hidden id="id" name="id" value={data.id} />
+          <input onChange={() => {}} hidden id="boardId" name="boardId" value={data.boardId} />
+          <FormRadio id="priority" className="mx-6 w-[220px]" currentPriority={data.priority} />
+          <FormSubmit
+            variant="ghost"
+            className="rounded-none w-full h-auto p-2 px-5 justify-start font-normal text-sm"
+            setProgress={setProgress}
+          >
+            <Hammer className="w-4 h-4 text-neutral-600 mr-2" />
+            Save
+          </FormSubmit>
+        </form>
+        <Separator className="bg-black/20 h-[2px] my-1 " />
         <Button
           onClick={onAddCard}
           className="rounded-none w-full h-auto p-2 px-5 justify-start font-normal text-sm"
@@ -95,7 +136,7 @@ const ListOption = ({ data, onAddCard }: ListOptionProps) => {
             Copy list
           </FormSubmit>
         </form>
-        <Separator className="bg-black/20 h-[2px] " />
+        <Separator className="bg-black/20 h-[2px] my-1 " />
         <form action={onDeleListSubmit}>
           <input onChange={() => {}} hidden id="id" name="id" value={data.id} />
           <input onChange={() => {}} hidden id="boardId" name="boardId" value={data.boardId} />

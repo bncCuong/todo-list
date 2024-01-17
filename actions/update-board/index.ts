@@ -17,8 +17,14 @@ const hanler = async (data: InputType): Promise<ReturnType> => {
 
   const { title, id, priority } = data;
   let _priority;
-  if (PRIORITY.hasOwnProperty(priority.toUpperCase())) {
-    _priority = PRIORITY[priority.toUpperCase()] as 'LOW' | 'MEDIUM' | 'HIGH';
+  if (priority === 'high') {
+    _priority = PRIORITY.HIGH;
+  }
+  if (priority === 'medium') {
+    _priority = PRIORITY.MEDIUM;
+  }
+  if (priority === 'low') {
+    _priority = PRIORITY.LOW;
   }
   let board;
 

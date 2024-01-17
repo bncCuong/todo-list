@@ -17,7 +17,6 @@ const hanler = async (data: InputType): Promise<ReturnType> => {
   }
 
   const { title, boardId, priority } = data;
-  console.log(priority);
   let _priority;
   if (priority === 'high') {
     _priority = PRIORITY.HIGH;

@@ -47,7 +47,7 @@ const Sidebar = ({ storageKey = 't-sidebar-state' }: SideBarProps) => {
   if (!isLoadedOrg || !isLoadedOrgList || userMemberships.isLoading) {
     return (
       <>
-        <LoadingBar color="red" progress={progress} onLoaderFinished={() => setProgress(0)} />
+        <LoadingBar loaderSpeed={2500} color="red" progress={progress} onLoaderFinished={() => setProgress(0)} />
         <div className="flex items-center justify-between mb-2">
           <Skeleton className="h-10 w-[50%]" />
           <Skeleton className="h-10 w-10" />

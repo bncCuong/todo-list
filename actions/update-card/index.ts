@@ -16,7 +16,6 @@ const hanler = async (data: InputType): Promise<ReturnType> => {
   }
 
   const { id, boardId, ...value } = data;
-
   let card;
 
   try {
