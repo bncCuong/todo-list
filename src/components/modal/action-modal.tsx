@@ -65,7 +65,7 @@ const ActionsModal = ({ data, onClose }: { data: CardWithList; onClose: () => vo
         <Hand className="w-4 h-4 mb-1" />
         <p className="font-semibold mb-1">Action:</p>
       </div>
-      <Button disabled={loading} className="" variant="primary" onClick={onCompleteHanler}>
+      <Button disabled={loading} className="justify-start" variant="primary" onClick={onCompleteHanler}>
         {data.completed ? (
           <p className="flex items-center gap-1">
             <Square className="w-4 h-4 mr-2 " /> Incomplete
@@ -76,10 +76,10 @@ const ActionsModal = ({ data, onClose }: { data: CardWithList; onClose: () => vo
           </p>
         )}
       </Button>
-      <Button disabled={loading} className="my-1" onClick={onCopyCardHanler}>
+      <Button disabled={loading} className="my-1 justify-start" onClick={onCopyCardHanler}>
         <Copy className="w-4 h-4 mr-2" /> Copy
       </Button>
-      <Button disabled={loading} variant="gray" onClick={onDeleteCardHanler}>
+      <Button disabled={loading} variant="gray" onClick={onDeleteCardHanler} className="justify-start">
         <Trash className="w-4 h-4 mr-2" /> Delete
       </Button>
     </div>
