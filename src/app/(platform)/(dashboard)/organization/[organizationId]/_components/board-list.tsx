@@ -27,8 +27,8 @@ export const BoardList = async ({ query, priority, page = 1 }: { query: string; 
     arrFillter = priorityValues.map((value) => value as PRIORITY);
   }
 
-  const PAGESIZE = 4;
-  const SKIP = 0;
+  const PAGESIZE = 3;
+  const SKIP = page * PAGESIZE;
   const boards = await db.board.findMany({
     take: PAGESIZE,
     skip: SKIP,
@@ -53,7 +53,6 @@ export const BoardList = async ({ query, priority, page = 1 }: { query: string; 
 
   const totalBoard = await db.board.count();
   const totalPage = Math.ceil(totalBoard / PAGESIZE);
-  const hasNextPage = PAGESIZE + SKIP < totalBoard;
 
   const isPro = await checkSubscription();
 
@@ -63,7 +62,7 @@ export const BoardList = async ({ query, priority, page = 1 }: { query: string; 
     <div className="space-y-4 ">
       <div className="space-y-4 lg:space-y-0 lg:flex items-center font-semibold text-lg text-neutral-700 justify-between">
         <p className="flex gap-1 min-w-[190px]">
-          <User2 className="w-6 h-6 mr-2" /> Your Board ({boards.length})
+          <User2 className="w-6 h-6 mr-2" /> Your Board ({SKIP < totalBoard ? SKIP : totalBoard}/{totalBoard})
         </p>
         <FormCheckBox id="priority" className="mr-2 lg:max-w-[210px] pb-2" title="Priority filter" />
         <SearchInput placeHolder="Search board...." className="w-full" />
@@ -122,7 +121,7 @@ export const BoardList = async ({ query, priority, page = 1 }: { query: string; 
       </div>
 
       <div className="absolute bottom-4 right-4">
-        <PaginationPage currentPage={page} hasNextPage={hasNextPage} totalPage={totalPage} pageSize={PAGESIZE} />
+        <PaginationPage currentPage={page} totalPage={totalPage} pageSize={PAGESIZE} />
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ const Pagination = ({ className, ...props }: React.ComponentProps<'nav'>) => (
   <nav
     role="navigation"
     aria-label="pagination"
-    className={cn('mx-auto flex w-full justify-center', className)}
+    className={cn('mx-auto flex w-full justify-center cursor-pointer', className)}
     {...props}
   />
 );
@@ -23,7 +23,7 @@ const PaginationContent = React.forwardRef<HTMLUListElement, React.ComponentProp
 PaginationContent.displayName = 'PaginationContent';
 
 const PaginationItem = React.forwardRef<HTMLLIElement, React.ComponentProps<'li'>>(({ className, ...props }, ref) => (
-  <li ref={ref} className={cn('y', className)} {...props} />
+  <li ref={ref} className={cn('', className)} {...props} />
 ));
 PaginationItem.displayName = 'PaginationItem';
 

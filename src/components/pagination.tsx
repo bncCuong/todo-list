@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Pagination,
   PaginationContent,
@@ -7,47 +9,64 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 interface PaginationProps {
   pageSize: number | 1;
   totalPage: number;
-  hasNextPage: boolean;
   currentPage: number;
 }
 
-const PaginationPage = ({ hasNextPage, pageSize, totalPage, currentPage }: PaginationProps) => {
-  const pageNumber = currentPage | 1;
-  const skip = (pageNumber - 1) * pageSize;
-  const _currentPage = Math.min(Math.max(Number(pageSize), 1), totalPage);
-  console.log(currentPage);
+const PaginationPage = ({ totalPage, currentPage }: PaginationProps) => {
+  const { replace } = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const nextPage = () => {
-    if (hasNextPage) {
-      currentPage + 1;
+  const totalNumber = [];
+  for (let i = 1; i <= totalPage; i++) {
+    totalNumber.push(i);
+  }
+
+  const createPageURL = (pageNumber: number) => {
+    console.log(pageNumber);
+    console.log(totalPage);
+    if (pageNumber < 1 || pageNumber > totalPage) {
+      return;
     }
+    const params = new URLSearchParams(searchParams);
+    params.set('page', pageNumber.toString());
+    replace(`${pathname}?${params.toString()}`);
   };
   return (
     <Pagination>
       <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevious href={`?page=${currentPage - 1}`} />
+        <PaginationItem onClick={() => createPageURL(Number(currentPage) - 1)} key={Math.random() * 10}>
+          <PaginationPrevious />
         </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href={`?page=1`}>1</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#" isActive>
-            2
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">3</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationEllipsis />
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationNext href={`?page=${currentPage + 1}`} />
+        {currentPage > 3 && (
+          <PaginationItem key={Math.random() * 10}>
+            <PaginationEllipsis />
+          </PaginationItem>
+        )}
+        {totalNumber.map((item, index) => {
+          return (
+            <PaginationItem
+              hidden={currentPage - item > 2}
+              key={Math.random() * index}
+              onClick={() => createPageURL(item)}
+            >
+              <PaginationLink isActive={currentPage == item}>{item}</PaginationLink>
+            </PaginationItem>
+          );
+        })}
+        {totalPage > 5 && (
+          <PaginationItem key={Math.random() * 10}>
+            <PaginationEllipsis />
+          </PaginationItem>
+        )}
+        <PaginationItem onClick={() => createPageURL(Number(currentPage) + 1)} key={Math.random() * 10}>
+          <PaginationNext />
         </PaginationItem>
       </PaginationContent>
     </Pagination>
