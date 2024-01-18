@@ -8,7 +8,8 @@ import HeaderModal from './header-modal';
 import { DescriptionModal } from './description-modal';
 import ActionsModal from './action-modal';
 import { AuditLog } from '@prisma/client';
-import { ActivityModal } from './activity-model';
+import { ActivityModal } from './activity-modal';
+import SideBarModal from './sidebar-modal';
 
 const CardModal = () => {
   const id = useCardModal((state) => state.id);
@@ -26,15 +27,15 @@ const CardModal = () => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
-        {cardData ? <HeaderModal data={cardData} onClose={onClose} /> : <HeaderModal.Skeleton />}
-        <div className="grid grid-cols-1 md:grid-cols-4 md:gap-4 min-h-[200px]">
-          <div className="col-span-3">
-            <div className="w-full space-x-6">
+        <div className="flex justify-between ">
+          <div className="flex-1 mr-4 ">
+            {cardData ? <HeaderModal data={cardData} onClose={onClose} /> : <HeaderModal.Skeleton />}
+            <div className="w-full space-y-2">
               {!cardData ? <DescriptionModal.Skeleton /> : <DescriptionModal data={cardData} />}
+              {auditLog && auditLog.length > 0 ? <ActivityModal items={auditLog} /> : <ActivityModal.Skeleton />}
             </div>
           </div>
-          {cardData ? <ActionsModal data={cardData} onClose={onClose} /> : <ActionsModal.Skeleton />}
-          {auditLog && auditLog.length > 0 ? <ActivityModal items={auditLog} /> : <ActivityModal.Skeleton />}
+          {cardData ? <SideBarModal data={cardData} onClose={onClose} /> : <SideBarModal.Skeleton />}
         </div>
       </DialogContent>
     </Dialog>

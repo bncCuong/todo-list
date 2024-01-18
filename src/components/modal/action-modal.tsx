@@ -60,9 +60,9 @@ const ActionsModal = ({ data, onClose }: { data: CardWithList; onClose: () => vo
     executeComple({ boardId, id, completed });
   };
   return (
-    <div className="flex flex-col ml-10 md:ml-0 min-w-[120px]">
-      <div className=" flex items-center gap-2">
-        <Hand className="w-4 h-4 mb-1" />
+    <div className="flex flex-col ml-10 md:ml-0 min-w-[120px] mt-2">
+      <div className=" flex items-center gap-2 mb-4">
+        <Hand className="w-4 h-4 mb-1 text-neutral-600" />
         <p className="font-semibold mb-1">Action:</p>
       </div>
       <Button disabled={loading} className="justify-start" variant="primary" onClick={onCompleteHanler}>

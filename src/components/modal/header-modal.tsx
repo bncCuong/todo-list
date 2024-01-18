@@ -11,6 +11,7 @@ import { useAction } from '@/hooks/useActions';
 import { updateCard } from '../../../actions/update-card';
 import { toast } from 'sonner';
 import { Hint } from '../ui/hint';
+import { Separator } from '@radix-ui/react-separator';
 
 const HeaderModal = ({ data, onClose }: { data: CardWithList; onClose: () => void }) => {
   const [title, setTitle] = useState<string>(data?.title);
@@ -40,23 +41,12 @@ const HeaderModal = ({ data, onClose }: { data: CardWithList; onClose: () => voi
     if (title === data.title) return;
     const boardId = params.boardId as string;
     const id = data.id;
-
     execute({ title, boardId, id });
   };
 
-  const Label = () => {
-    return (
-      <div>
-        {title}
-        <Hint description="Edit title board" side="bottom" sideOffset={10}>
-          <Pencil className="w-4 h-4" />
-        </Hint>
-      </div>
-    );
-  };
   return (
     <div className="flex gap-x-3 mb-6 w-full items-start">
-      <Layout className="w-6 h-6 mt-1 text-neutral-600" />
+      <Layout className="w-6 h-6 mt-2.5 text-neutral-600" />
       <div className="w-full">
         <form action={onSubmitHanler}>
           <FormInput
@@ -69,6 +59,7 @@ const HeaderModal = ({ data, onClose }: { data: CardWithList; onClose: () => voi
           />
         </form>
         <p className="text-sm text-muted-foreground">in list {data.list.title}</p>
+        <Separator className="h-[2px] bg-black/20" />
       </div>
     </div>
   );

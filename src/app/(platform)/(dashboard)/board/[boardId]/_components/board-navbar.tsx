@@ -24,7 +24,7 @@ const BoardNavbar = async ({ _data }: BoardNavbarProps) => {
           : 'bg-black/50 ',
       )}
     >
-      <div>
+      <div className="flex">
         <BoardTitleFrom data={_data} />
         <Hint description="Edit title board" side="bottom" sideOffset={10}>
           <Pencil className="w-4 h-4" />

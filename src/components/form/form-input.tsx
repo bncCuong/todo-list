@@ -26,6 +26,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
     const [progress, setProgress] = useState(0);
 
     const { pending } = useFormStatus();
+
     useEffect(() => {
       if (pending) {
         setProgress(100);
@@ -33,7 +34,13 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
     }, [pending]);
     return (
       <div className="space-y-2">
-        <LoadingBar color="#f11946" loaderSpeed={2500} transitionTime={2000} progress={progress} onLoaderFinished={() => setProgress(0)} />
+        <LoadingBar
+          color="#f11946"
+          loaderSpeed={2500}
+          transitionTime={2000}
+          progress={progress}
+          onLoaderFinished={() => setProgress(0)}
+        />
         <div className="space-y-1">
           {label ? (
             <Label htmlFor={id} className="text-neutral-700 text-xs font-semibold ">

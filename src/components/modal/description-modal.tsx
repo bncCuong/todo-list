@@ -50,7 +50,7 @@ export const DescriptionModal = ({ data }: { data: CardWithList }) => {
   };
   return (
     <div className="flex items-start gap-x-3 w-full">
-      <AlignLeft className="w-4 h-4 mr-2 text-neutral-700 mt-1" />
+      <AlignLeft className="w-5 h-5 mx-1 text-neutral-700 mt-1" />
       <div className="w-full">
         <p className="font-semibold ">Description</p>
         {isEditing ? (

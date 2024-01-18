@@ -13,18 +13,25 @@ import SearchInput from '@/components/search-input';
 import FormCheckBox from '@/components/form/form-checkbox';
 import { PRIORITY } from '@prisma/client';
 import { cn } from '@/lib/utils';
+import PaginationPage from '@/components/pagination';
 
-export const BoardList = async ({ query, priority }: { query: string; priority: string }) => {
+export const BoardList = async ({ query, priority, page = 1 }: { query: string; priority: string; page: number }) => {
   const { orgId } = auth();
   if (!orgId) {
     return redirect('/select-org');
   }
+
   let arrFillter: PRIORITY[] = [];
   const priorityValues = priority.toUpperCase().split(',');
   if (priorityValues.length > 0 && priorityValues[0] !== '') {
     arrFillter = priorityValues.map((value) => value as PRIORITY);
   }
+
+  const PAGESIZE = 4;
+  const SKIP = 0;
   const boards = await db.board.findMany({
+    take: PAGESIZE,
+    skip: SKIP,
     where: {
       orgId,
       title: { contains: query },
@@ -44,12 +51,16 @@ export const BoardList = async ({ query, priority }: { query: string; priority: 
     );
   }
 
+  const totalBoard = await db.board.count();
+  const totalPage = Math.ceil(totalBoard / PAGESIZE);
+  const hasNextPage = PAGESIZE + SKIP < totalBoard;
+
   const isPro = await checkSubscription();
 
   const availabelCount = await getAvailabelCount();
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 ">
       <div className="space-y-4 lg:space-y-0 lg:flex items-center font-semibold text-lg text-neutral-700 justify-between">
         <p className="flex gap-1 min-w-[190px]">
           <User2 className="w-6 h-6 mr-2" /> Your Board ({boards.length})
@@ -108,6 +119,10 @@ export const BoardList = async ({ query, priority }: { query: string; priority: 
             </Hint>
           </div>
         </FormPopover>
+      </div>
+
+      <div className="absolute bottom-4 right-4">
+        <PaginationPage currentPage={page} hasNextPage={hasNextPage} totalPage={totalPage} pageSize={PAGESIZE} />
       </div>
     </div>
   );

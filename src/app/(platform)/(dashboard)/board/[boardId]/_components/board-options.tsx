@@ -1,13 +1,12 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useAction } from '@/hooks/useActions';
-import { Hammer, MoreHorizontal, Save, SaveIcon, Trash, X } from 'lucide-react';
+import { Hammer, MoreHorizontal, Trash, X } from 'lucide-react';
 import { deleteBoard } from '../../../../../../../actions/delete-board';
-import { toast } from 'sonner';
-import FormCheckBox from '@/components/form/form-checkbox';
 import { updateBoard } from '../../../../../../../actions/update-board';
+import { toast } from 'sonner';
+import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Button } from '@/components/ui/button';
 import { FormSubmit } from '@/components/form/form-submit';
 import { Separator } from '@/components/ui/separator';
 import FormRadio from '@/components/form/form-radio';
@@ -23,7 +22,7 @@ const BoardOption = ({ id, _priority }: { id: string; _priority?: PRIORITY | nul
     },
   });
 
-  const { execute: _updateBoard, isLoading: updateLoading } = useAction(updateBoard, {
+  const { execute: _updateBoard } = useAction(updateBoard, {
     onSuccess: (data) => {
       toast.success(`Priority of ${data.title} updated`);
     },
