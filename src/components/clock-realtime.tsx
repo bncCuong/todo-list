@@ -22,7 +22,7 @@ const ClockRealTime = () => {
   };
 
   return (
-    <div className="flex items-center hidden md:flex relative justify-center">
+    <div className=" items-center hidden md:flex relative justify-center">
       <Calendar
         className="w-4 h-4 text-neutral-600 ml-13 hover:cursor-pointer hover:text-neutral-900 hover:scale-105"
         onClick={showCalendarHanler}

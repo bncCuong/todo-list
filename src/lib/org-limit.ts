@@ -1,6 +1,6 @@
 import { auth } from '@clerk/nextjs';
 import { db } from './db';
-import { BOARD_FREE } from '@/constant/board-count';
+import { BOARD_FREE } from '@/constant';
 
 // khoi? tao va tang dan so luong board
 export const incrementAvailabelCount = async () => {

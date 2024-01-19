@@ -10,7 +10,7 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface PaginationProps {
   pageSize: number | 1;
@@ -19,6 +19,7 @@ interface PaginationProps {
 }
 
 const PaginationPage = ({ totalPage, currentPage }: PaginationProps) => {
+  const [showPage, setShowPage] = useState<boolean>(false)
   const { replace } = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -29,13 +30,14 @@ const PaginationPage = ({ totalPage, currentPage }: PaginationProps) => {
   }
 
   const createPageURL = (pageNumber: number) => {
-    console.log(pageNumber);
-    console.log(totalPage);
     if (pageNumber < 1 || pageNumber > totalPage) {
       return;
     }
+    if (pageNumber > 3) setShowPage(false)
+    if(currentPage + 2 > pageNumber) setShowPage(false)
     const params = new URLSearchParams(searchParams);
     params.set('page', pageNumber.toString());
+    if(pageNumber == 0) params.delete("page")
     replace(`${pathname}?${params.toString()}`);
   };
   return (
@@ -44,15 +46,15 @@ const PaginationPage = ({ totalPage, currentPage }: PaginationProps) => {
         <PaginationItem onClick={() => createPageURL(Number(currentPage) - 1)} key={Math.random() * 10}>
           <PaginationPrevious />
         </PaginationItem>
-        {currentPage > 3 && (
-          <PaginationItem key={Math.random() * 10}>
+        {currentPage > 4 && !showPage &&  totalPage > 5 && (
+          <PaginationItem key={Math.random() * 10} onClick={() => setShowPage(true)}>
             <PaginationEllipsis />
           </PaginationItem>
         )}
         {totalNumber.map((item, index) => {
           return (
             <PaginationItem
-              hidden={currentPage - item > 2}
+              hidden={(Number(currentPage) - item > 3 && !showPage && totalPage > 5) || (Number(currentPage) +3 < item && !showPage&& totalPage > 5) }
               key={Math.random() * index}
               onClick={() => createPageURL(item)}
             >
@@ -60,8 +62,8 @@ const PaginationPage = ({ totalPage, currentPage }: PaginationProps) => {
             </PaginationItem>
           );
         })}
-        {totalPage > 5 && (
-          <PaginationItem key={Math.random() * 10}>
+        {totalPage - currentPage > 3 && !showPage && totalPage > 5 && (
+          <PaginationItem key={Math.random() * 10}  onClick={() => setShowPage(true)}>
             <PaginationEllipsis />
           </PaginationItem>
         )}

@@ -6,7 +6,7 @@ import { db } from '@/lib/db';
 import { auth } from '@clerk/nextjs';
 import { HelpCircle, User2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { BOARD_FREE } from '@/constant/board-count';
+import { BOARD_FREE, PAGE_SIZE } from '@/constant';
 import { getAvailabelCount } from '@/lib/org-limit';
 import { checkSubscription } from '@/lib/subscription';
 import SearchInput from '@/components/search-input';
@@ -16,6 +16,9 @@ import { cn } from '@/lib/utils';
 import PaginationPage from '@/components/pagination';
 
 export const BoardList = async ({ query, priority, page = 1 }: { query: string; priority: string; page: number }) => {
+  
+  const SKIP = (page-1) * PAGE_SIZE;
+
   const { orgId } = auth();
   if (!orgId) {
     return redirect('/select-org');
@@ -26,12 +29,8 @@ export const BoardList = async ({ query, priority, page = 1 }: { query: string; 
   if (priorityValues.length > 0 && priorityValues[0] !== '') {
     arrFillter = priorityValues.map((value) => value as PRIORITY);
   }
-
-  const PAGESIZE = 3;
-  const SKIP = page * PAGESIZE;
+ 
   const boards = await db.board.findMany({
-    take: PAGESIZE,
-    skip: SKIP,
     where: {
       orgId,
       title: { contains: query },
@@ -40,7 +39,11 @@ export const BoardList = async ({ query, priority, page = 1 }: { query: string; 
     orderBy: {
       createdAt: 'asc',
     },
+    ...(PAGE_SIZE > 0  && {take: PAGE_SIZE,  skip: SKIP}),
   });
+
+  const totalBoard = await  db.board.count()
+  const totalPage = Math.ceil(totalBoard / PAGE_SIZE);
 
   if (boards.length == 0 && query !== '') {
     return (
@@ -50,19 +53,15 @@ export const BoardList = async ({ query, priority, page = 1 }: { query: string; 
       </div>
     );
   }
-
-  const totalBoard = await db.board.count();
-  const totalPage = Math.ceil(totalBoard / PAGESIZE);
-
+  
   const isPro = await checkSubscription();
 
   const availabelCount = await getAvailabelCount();
-
   return (
     <div className="space-y-4 ">
       <div className="space-y-4 lg:space-y-0 lg:flex items-center font-semibold text-lg text-neutral-700 justify-between">
         <p className="flex gap-1 min-w-[190px]">
-          <User2 className="w-6 h-6 mr-2" /> Your Board ({SKIP < totalBoard ? SKIP : totalBoard}/{totalBoard})
+          <User2 className="w-6 h-6 mr-2" /> Your Board ({PAGE_SIZE > 0 && Number(totalPage) !==  Number(page)  ? boards.length * page : totalBoard}/{totalBoard})
         </p>
         <FormCheckBox id="priority" className="mr-2 lg:max-w-[210px] pb-2" title="Priority filter" />
         <SearchInput placeHolder="Search board...." className="w-full" />
@@ -120,9 +119,9 @@ export const BoardList = async ({ query, priority, page = 1 }: { query: string; 
         </FormPopover>
       </div>
 
-      <div className="absolute bottom-4 right-4">
-        <PaginationPage currentPage={page} totalPage={totalPage} pageSize={PAGESIZE} />
-      </div>
+     {PAGE_SIZE > 0 &&  <div className="absolute bottom-4 right-4">
+        <PaginationPage currentPage={page} totalPage={totalPage} pageSize={PAGE_SIZE} />
+      </div>}
     </div>
   );
 };
