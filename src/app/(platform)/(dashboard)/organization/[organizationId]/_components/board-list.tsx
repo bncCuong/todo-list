@@ -6,7 +6,7 @@ import { db } from '@/lib/db';
 import { auth } from '@clerk/nextjs';
 import { HelpCircle, User2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { BOARD_FREE, PAGE_SIZE } from '@/constant';
+import { BOARD_FREE } from '@/constant';
 import { getAvailabelCount } from '@/lib/org-limit';
 import { checkSubscription } from '@/lib/subscription';
 import SearchInput from '@/components/search-input';
@@ -15,7 +15,22 @@ import { PRIORITY } from '@prisma/client';
 import { cn } from '@/lib/utils';
 import PaginationPage from '@/components/pagination';
 
-export const BoardList = async ({ query, priority, page = 1 }: { query: string; priority: string; page: number }) => {
+export const BoardList = async ({
+  query,
+  priority,
+  page = 1,
+  pagesize,
+}: {
+  query: string;
+  priority: string;
+  page: number;
+  pagesize: number | undefined;
+}) => {
+  let PAGE_SIZE: number = 4;
+
+  if (pagesize !== undefined) {
+    PAGE_SIZE = pagesize;
+  }
   const SKIP = (page - 1) * PAGE_SIZE;
 
   const { orgId } = auth();
@@ -29,6 +44,7 @@ export const BoardList = async ({ query, priority, page = 1 }: { query: string; 
     arrFillter = priorityValues.map((value) => value as PRIORITY);
   }
 
+  PAGE_SIZE = Number(PAGE_SIZE);
   const boards = await db.board.findMany({
     where: {
       orgId,
