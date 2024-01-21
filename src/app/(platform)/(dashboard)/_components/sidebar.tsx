@@ -47,7 +47,7 @@ const Sidebar = ({ storageKey = 't-sidebar-state' }: SideBarProps) => {
   if (!isLoadedOrg || !isLoadedOrgList || userMemberships.isLoading) {
     return (
       <>
-        <LoadingBar loaderSpeed={2500} color="red" progress={progress} onLoaderFinished={() => setProgress(0)} />
+        {/* <LoadingBar loaderSpeed={2500} color="red" progress={progress} onLoaderFinished={() => setProgress(0)} /> */}
         <div className="flex items-center justify-between mb-2">
           <Skeleton className="h-10 w-[50%]" />
           <Skeleton className="h-10 w-10" />
@@ -62,6 +62,8 @@ const Sidebar = ({ storageKey = 't-sidebar-state' }: SideBarProps) => {
   }
   return (
     <>
+      <LoadingBar loaderSpeed={2500} color="red" progress={progress} onLoaderFinished={() => setProgress(0)} />
+
       <div className="font-medium text-xs flex items-center mb-1">
         <span className="pl-4">WorkSpaces</span>
         <Button asChild type="button" size="icon" variant="ghost" className="ml-auto">

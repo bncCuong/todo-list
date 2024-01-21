@@ -5,6 +5,7 @@ import { Info } from './_components/info';
 import { BoardList } from './_components/board-list';
 import { Suspense } from 'react';
 import { checkSubscription } from '@/lib/subscription';
+import LoadingBar from 'react-top-loading-bar';
 
 const OrganizationIdPage = async ({
   searchParams,

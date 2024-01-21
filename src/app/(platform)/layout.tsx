@@ -10,7 +10,8 @@ const PlatfromLayout = ({ children }: { children: React.ReactNode }) => {
     <ClerkProvider>
       <QueryProvider>
         <ModalProvider />
-        <Toaster /> {children}
+        <Toaster />
+        {children}
       </QueryProvider>
     </ClerkProvider>
   );
