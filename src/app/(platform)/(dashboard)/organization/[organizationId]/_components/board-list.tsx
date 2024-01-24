@@ -45,7 +45,7 @@ export const BoardList = async ({
   }
 
   PAGE_SIZE = Number(PAGE_SIZE);
-  const boards = await db.board.findMany({
+  const getBoards = db.board.findMany({
     where: {
       orgId,
       title: { contains: query },
@@ -57,7 +57,7 @@ export const BoardList = async ({
     ...(PAGE_SIZE > 0 && { take: PAGE_SIZE, skip: SKIP }),
   });
 
-  const totalBoard = await db.board.count({
+  const getTotalBoard = db.board.count({
     where: {
       orgId,
       title: { contains: query },
@@ -67,6 +67,9 @@ export const BoardList = async ({
       createdAt: 'asc',
     },
   });
+
+  //get nhieu data 1 luc
+  const [boards, totalBoard] = await Promise.all([getBoards, getTotalBoard]);
   const totalPage = Math.ceil(totalBoard / PAGE_SIZE);
 
   if (boards.length == 0 && query !== '') {
